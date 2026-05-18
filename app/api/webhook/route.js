@@ -59,14 +59,29 @@ export async function POST(request) {
     debug.metadata = session.metadata
 
     if (userId) {
-      const { data, error } = await supabase.from('profiles').upsert({
-        user_id: userId,
-        is_pro: true,
-        stripe_customer_id: session.customer,
-        stripe_subscription_id: session.subscription,
-      }, { onConflict: 'user_id' })
+      const { data: existing } = await supabase
+        .from('profiles')
+        .select('user_id')
+        .eq('user_id', userId)
+        .maybeSingle()
+
+      let error
+      if (existing) {
+        ;({ error } = await supabase.from('profiles').update({
+          is_pro: true,
+          stripe_customer_id: session.customer,
+          stripe_subscription_id: session.subscription,
+        }).eq('user_id', userId))
+      } else {
+        ;({ error } = await supabase.from('profiles').insert({
+          user_id: userId,
+          is_pro: true,
+          stripe_customer_id: session.customer,
+          stripe_subscription_id: session.subscription,
+        }))
+      }
       debug.supabaseError = error ? JSON.stringify(error) : null
-      debug.supabaseData = data ? JSON.stringify(data) : null
+      debug.existed = !!existing
     }
   }
 
