@@ -114,6 +114,7 @@ export default function Home() {
   const [history, setHistory] = useState([])
   const [showHistory, setShowHistory] = useState(false)
   const [isPro, setIsPro] = useState(false)
+  const [showPricing, setShowPricing] = useState(false)
   const fileInputRef = useRef(null)
   const { isSignedIn, user } = useUser()
 
@@ -305,6 +306,15 @@ export default function Home() {
               Historial
             </button>
           )}
+          {!isPro && (
+            <button
+              onClick={() => setShowPricing(true)}
+              className="text-xs font-bold px-3 py-1.5 rounded-lg cursor-pointer transition-all active:scale-95"
+              style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', color: 'white' }}
+            >
+              ✦ Pro
+            </button>
+          )}
           {isSignedIn ? (
             <UserButton afterSignOutUrl="/" />
           ) : (
@@ -395,6 +405,75 @@ export default function Home() {
               className="text-sm text-brand-subtle text-center py-1 cursor-pointer hover:text-brand-fg transition-colors"
             >
               Volver
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Pricing modal ──────────────────────────────────────────────────── */}
+      {showPricing && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-white w-full max-w-md rounded-t-3xl p-6 flex flex-col gap-5 animate-fade-up">
+            <div className="w-12 h-1.5 bg-brand-muted rounded-full mx-auto" />
+
+            <div className="text-center">
+              <h2 className="text-xl font-extrabold text-brand-fg">Elige tu plan</h2>
+              <p className="text-sm text-brand-subtle mt-1">Sin permanencia. Cancela cuando quieras.</p>
+            </div>
+
+            {/* Plan cards */}
+            <div className="grid grid-cols-2 gap-3">
+              {/* Free */}
+              <div className="rounded-2xl border-2 border-brand-border p-4 flex flex-col gap-2">
+                <p className="text-xs font-bold text-brand-subtle uppercase tracking-wider">Free</p>
+                <p className="text-2xl font-extrabold text-brand-fg">0€</p>
+                <p className="text-[11px] text-brand-subtle">para siempre</p>
+                <div className="border-t border-brand-border my-1" />
+                <ul className="text-xs text-brand-secondary space-y-1.5">
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> 5 análisis/día</li>
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> 6 plataformas</li>
+                  <li className="flex items-center gap-1.5"><span className="text-slate-300">✗</span> Historial</li>
+                  <li className="flex items-center gap-1.5"><span className="text-slate-300">✗</span> Sin límites</li>
+                </ul>
+              </div>
+
+              {/* Pro */}
+              <div className="rounded-2xl border-2 p-4 flex flex-col gap-2 relative overflow-hidden" style={{ borderColor: '#2563EB', background: 'linear-gradient(145deg, #EFF6FF, #F5F3FF)' }}>
+                <div className="absolute top-2.5 right-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}>✦ PRO</div>
+                <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#2563EB' }}>Pro</p>
+                <p className="text-2xl font-extrabold text-brand-fg">7€</p>
+                <p className="text-[11px] text-brand-subtle">al mes</p>
+                <div className="border-t border-blue-100 my-1" />
+                <ul className="text-xs text-brand-secondary space-y-1.5">
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> Ilimitados</li>
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> 6 plataformas</li>
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> Historial</li>
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> Sin límites</li>
+                </ul>
+              </div>
+            </div>
+
+            {isSignedIn ? (
+              <button
+                onClick={() => { setShowPricing(false); handleCheckout() }}
+                className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform"
+                style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', boxShadow: '0 8px 24px -6px rgba(37,99,235,0.5)' }}
+              >
+                Hazte Pro — 7€/mes
+              </button>
+            ) : (
+              <SignInButton mode="modal">
+                <button className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}>
+                  Inicia sesión para suscribirte
+                </button>
+              </SignInButton>
+            )}
+
+            <button
+              onClick={() => setShowPricing(false)}
+              className="text-sm text-brand-subtle text-center py-1 cursor-pointer hover:text-brand-fg transition-colors"
+            >
+              Ahora no
             </button>
           </div>
         </div>
