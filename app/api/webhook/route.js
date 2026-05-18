@@ -51,9 +51,6 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 })
   }
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const hasKey = !!process.env.SUPABASE_SERVICE_ROLE_KEY
-
   const supabase = getSupabase()
 
   if (event.type === 'checkout.session.completed') {
@@ -71,10 +68,8 @@ export async function POST(request) {
         { onConflict: 'user_id' }
       )
       if (error) {
-        return NextResponse.json({
-          error: error.message,
-          debug: { supabaseUrl, hasKey },
-        }, { status: 500 })
+        console.error('[webhook] upsert error:', error.message)
+        return NextResponse.json({ error: error.message }, { status: 500 })
       }
     }
   }
