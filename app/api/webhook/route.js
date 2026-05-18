@@ -49,7 +49,11 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 })
   }
 
-  const debug = { eventType: event.type }
+  const debug = {
+    eventType: event.type,
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL?.slice(0, 40),
+    hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+  }
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object
