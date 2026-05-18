@@ -225,12 +225,12 @@ export default function Home() {
     <div className="min-h-dvh bg-brand-bg flex flex-col">
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <header className="bg-brand-primary text-white px-4 h-14 flex items-center justify-between sticky top-0 z-20 flex-shrink-0">
+      <header className="text-white px-4 h-14 flex items-center justify-between sticky top-0 z-20 flex-shrink-0" style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-brand-accent rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}>
             <LogoIcon />
           </div>
-          <span className="font-bold text-lg tracking-tight">ResellSnap</span>
+          <span className="font-extrabold text-lg tracking-tight">ResellSnap</span>
         </div>
         <div className="flex items-center gap-2">
           {stage !== 'capture' && (
@@ -334,28 +334,38 @@ export default function Home() {
             STAGE 1 — CAPTURE
         ════════════════════════════════════════════════════════════ */}
         {stage === 'capture' && (
-          <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 gap-8">
-            {/* Hero text */}
-            <div className="text-center space-y-2">
-              <h1 className="text-2xl font-bold text-brand-fg leading-snug">
-                ¿Cuánto vale tu artículo?
+          <div className="flex-1 flex flex-col px-5 pt-8 pb-10 gap-8 overflow-y-auto">
+
+            {/* Hero */}
+            <div className="text-center space-y-3 animate-fade-up">
+              <div className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 rounded-full px-3 py-1 mb-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                <span className="text-xs font-semibold text-blue-700">IA en tiempo real</span>
+              </div>
+              <h1 className="text-[28px] font-extrabold text-brand-fg leading-tight tracking-tight">
+                ¿Cuánto vale<br />
+                <span className="gradient-text">tu artículo?</span>
               </h1>
               <p className="text-brand-subtle text-sm leading-relaxed max-w-xs mx-auto">
-                Haz una foto y descubre el precio de reventa en todas las plataformas — al instante.
+                Fotografía cualquier prenda o sneaker y obtén precios de reventa reales en 6 plataformas al instante.
               </p>
             </div>
 
             {/* Camera button */}
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="relative w-44 h-44 rounded-full bg-brand-primary text-white flex flex-col items-center justify-center gap-3 shadow-2xl shadow-slate-900/30 active:scale-95 transition-all duration-150 cursor-pointer group"
-              aria-label="Hacer foto o elegir imagen"
-            >
-              {/* Pulse ring */}
-              <span className="absolute inset-0 rounded-full bg-brand-primary opacity-30 scale-110 animate-ping pointer-events-none" />
-              <CameraIcon size={52} />
-              <span className="text-sm font-semibold tracking-wide">Fotografiar</span>
-            </button>
+            <div className="flex flex-col items-center gap-4">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="relative w-40 h-40 rounded-full flex flex-col items-center justify-center gap-3 active:scale-95 transition-all duration-150 cursor-pointer"
+                style={{ background: 'linear-gradient(135deg, #1E293B 0%, #2563EB 100%)', boxShadow: '0 20px 60px -10px rgba(37,99,235,0.5)' }}
+                aria-label="Hacer foto o elegir imagen"
+              >
+                <span className="btn-camera-ring" />
+                <span className="btn-camera-ring-2" />
+                <CameraIcon size={44} />
+                <span className="text-sm font-bold tracking-wide text-white">Fotografiar</span>
+              </button>
+              <p className="text-xs text-brand-subtle">Toca para elegir foto de tu galería</p>
+            </div>
 
             <input
               ref={fileInputRef}
@@ -366,34 +376,44 @@ export default function Home() {
               aria-label="Seleccionar imagen"
             />
 
-            {/* Platforms pill row */}
+            {/* Platform grid */}
             <div className="flex flex-col items-center gap-3">
-              <p className="text-xs text-brand-subtle font-medium uppercase tracking-wider">Precios en</p>
-              <div className="flex items-center gap-2 flex-wrap justify-center">
+              <p className="text-[11px] text-brand-subtle font-semibold uppercase tracking-widest">Precios en 6 plataformas</p>
+              <div className="flex flex-wrap justify-center gap-2">
                 {PLATFORMS.map((p) => (
                   <span
                     key={p.id}
-                    className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-brand-border text-brand-secondary"
+                    className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white border border-brand-border text-brand-secondary shadow-sm"
                   >
+                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: p.color }} />
                     {p.name}
                   </span>
                 ))}
               </div>
             </div>
 
-            {/* Feature hints */}
-            <div className="grid grid-cols-3 gap-3 w-full text-center">
+            {/* How it works */}
+            <div className="bg-white rounded-3xl border border-brand-border p-5 space-y-4">
+              <p className="text-xs font-bold text-brand-subtle uppercase tracking-widest">Cómo funciona</p>
               {[
-                { label: '6 plataformas', sub: 'en un vistazo' },
-                { label: 'IA experta', sub: 'en reventa' },
-                { label: 'Escala precio', sub: 'por condición' },
-              ].map((f) => (
-                <div key={f.label} className="bg-white rounded-2xl p-3 border border-brand-border">
-                  <p className="font-semibold text-xs text-brand-fg">{f.label}</p>
-                  <p className="text-[10px] text-brand-subtle mt-0.5">{f.sub}</p>
+                { step: '1', icon: '📷', title: 'Fotografía', desc: 'Haz una foto clara del artículo' },
+                { step: '2', icon: '🤖', title: 'La IA analiza', desc: 'Identifica marca, modelo y valor de mercado' },
+                { step: '3', icon: '💶', title: 'Obtén precios', desc: 'Precios reales en StockX, Vinted, Depop y más' },
+              ].map(({ step, icon, title, desc }) => (
+                <div key={step} className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-brand-fg flex items-center justify-center flex-shrink-0 text-sm">{icon}</div>
+                  <div>
+                    <p className="text-sm font-semibold text-brand-fg">{title}</p>
+                    <p className="text-xs text-brand-subtle leading-snug mt-0.5">{desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
+
+            {/* Free uses badge */}
+            <p className="text-center text-xs text-brand-subtle">
+              <span className="font-semibold text-brand-fg">{DAILY_LIMIT} análisis gratis</span> al día · Sin tarjeta
+            </p>
           </div>
         )}
 

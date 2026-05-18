@@ -21,9 +21,18 @@
   .h-dvh {
     height: 100dvh;
   }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-/* Scan line animation overlay */
+/* ── Scan line animation ───────────────────────────────────────────────────── */
 .scan-container {
   position: relative;
   overflow: hidden;
@@ -47,43 +56,79 @@
   100% { top: 85%; opacity: 0; }
 }
 
-/* Shimmer skeleton */
+/* ── Shimmer skeleton ──────────────────────────────────────────────────────── */
 .shimmer {
-  background: linear-gradient(
-    90deg,
-    #f1f2f3 0px,
-    #e2e8f0 40px,
-    #f1f2f3 80px
-  );
+  background: linear-gradient(90deg, #f1f2f3 0px, #e2e8f0 40px, #f1f2f3 80px);
   background-size: 1000px 100%;
   animation: shimmer 1.6s infinite linear;
 }
 
-/* Corner brackets for scan viewfinder */
-.scan-corner::before,
-.scan-corner::after,
-.scan-corner > span::before,
-.scan-corner > span::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-color: #2563EB;
-  border-style: solid;
+@keyframes shimmer {
+  0%   { background-position: -1000px 0; }
+  100% { background-position:  1000px 0; }
 }
 
-/* Smooth scrolling */
+/* ── Camera button pulse ───────────────────────────────────────────────────── */
+.btn-camera-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 9999px;
+  border: 2px solid rgba(37, 99, 235, 0.3);
+  animation: ring-pulse 2.4s ease-out infinite;
+}
+
+.btn-camera-ring-2 {
+  position: absolute;
+  inset: -18px;
+  border-radius: 9999px;
+  border: 2px solid rgba(37, 99, 235, 0.15);
+  animation: ring-pulse 2.4s ease-out infinite 0.6s;
+}
+
+@keyframes ring-pulse {
+  0%   { transform: scale(0.95); opacity: 0.8; }
+  60%  { transform: scale(1.05); opacity: 0.4; }
+  100% { transform: scale(1.1);  opacity: 0; }
+}
+
+/* ── Gradient text ─────────────────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Float animation for hero icon ────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ── Fade up staggered ─────────────────────────────────────────────────────── */
+@keyframes fade-up {
+  0%   { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.4s ease-out forwards;
+}
+
+/* ── Smooth scroll & global ────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
 }
 
-/* Remove default button styles on iOS */
 button {
   -webkit-appearance: none;
   appearance: none;
 }
 
-/* Prevent overscroll bounce for app feel */
 body {
   overscroll-behavior: none;
   background-color: #F8FAFC;
