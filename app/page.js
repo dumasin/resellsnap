@@ -193,9 +193,19 @@ export default function Home() {
     const params = new URLSearchParams(window.location.search)
     if (params.get('pro') === 'success') {
       window.history.replaceState({}, '', '/')
-      if (isSignedIn) setTimeout(() => loadProStatus(), 1500)
+      if (isSignedIn && user?.id) {
+        const email = user.primaryEmailAddress?.emailAddress
+        fetch('/api/sync-pro', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: user.id, email }),
+        })
+          .then(r => r.json())
+          .then(data => { if (data.is_pro) setIsPro(true) })
+          .catch(() => setTimeout(() => loadProStatus(), 2000))
+      }
     }
-  }, [isSignedIn, loadProStatus])
+  }, [isSignedIn, user, loadProStatus])
 
   // ── Checkout Stripe ──────────────────────────────────────────────────────────
   const handlePortal = useCallback(async () => {
