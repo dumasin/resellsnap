@@ -2,6 +2,33 @@
 
 import { useState, useRef, useCallback } from 'react'
 
+// ─── Usage limit ──────────────────────────────────────────────────────────────
+const DAILY_LIMIT = 2
+const STORAGE_KEY = 'resellsnap_usage'
+
+function getUsage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return { count: 0, date: '' }
+    return JSON.parse(raw)
+  } catch { return { count: 0, date: '' } }
+}
+
+function incrementUsage() {
+  const today = new Date().toISOString().slice(0, 10)
+  const usage = getUsage()
+  const count = usage.date === today ? usage.count + 1 : 1
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ count, date: today }))
+  return count
+}
+
+function getRemainingUses() {
+  const today = new Date().toISOString().slice(0, 10)
+  const usage = getUsage()
+  if (usage.date !== today) return DAILY_LIMIT
+  return Math.max(0, DAILY_LIMIT - usage.count)
+}
+
 // ─── Platform config ─────────────────────────────────────────────────────────
 const PLATFORMS = [
   { id: 'stockx',   name: 'StockX',   abbr: 'SX', color: '#00B81D', bg: '#f0fdf4', badge: 'Autenticado' },
@@ -79,6 +106,7 @@ export default function Home() {
   const [results, setResults] = useState(null)
   const [condition, setCondition] = useState('like_new')
   const [error, setError] = useState(null)
+  const [showPaywall, setShowPaywall] = useState(false)
   const fileInputRef = useRef(null)
 
   // ── Image handling ──────────────────────────────────────────────────────────
@@ -111,6 +139,10 @@ export default function Home() {
 
   // ── Analyze ─────────────────────────────────────────────────────────────────
   const handleAnalyze = useCallback(async () => {
+    if (getRemainingUses() <= 0) {
+      setShowPaywall(true)
+      return
+    }
     setStage('analyzing')
     setError(null)
     try {
@@ -124,6 +156,7 @@ export default function Home() {
         throw new Error(err.error || 'Error al analizar. Inténtalo de nuevo.')
       }
       const data = await res.json()
+      incrementUsage()
       setResults(data)
       setCondition(condition)
       setStage('results')
@@ -140,6 +173,7 @@ export default function Home() {
     setImagePreview(null)
     setResults(null)
     setError(null)
+    setShowPaywall(false)
     setCondition('like_new')
     if (fileInputRef.current) fileInputRef.current.value = ''
   }, [])
@@ -187,6 +221,44 @@ export default function Home() {
           </button>
         )}
       </header>
+
+      {/* ── Paywall modal ──────────────────────────────────────────────────── */}
+      {showPaywall && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-white w-full max-w-md rounded-t-3xl p-6 flex flex-col gap-5 animate-fade-up">
+            <div className="w-12 h-1.5 bg-brand-muted rounded-full mx-auto" />
+            <div className="text-center space-y-1">
+              <p className="text-2xl">🔒</p>
+              <h2 className="text-xl font-bold text-brand-fg">Límite diario alcanzado</h2>
+              <p className="text-sm text-brand-subtle leading-relaxed">
+                Has usado tus {DAILY_LIMIT} análisis gratuitos de hoy.<br />
+                Vuelve mañana o hazte Pro para análisis ilimitados.
+              </p>
+            </div>
+
+            <div className="bg-brand-fg rounded-2xl p-4 flex flex-col gap-3">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">ResellSnap Pro</p>
+              <ul className="text-sm text-slate-200 space-y-1.5">
+                {['Análisis ilimitados', 'Historial de escaneos', 'Acceso prioritario a nuevas funciones'].map((f) => (
+                  <li key={f} className="flex items-center gap-2">
+                    <span className="text-green-400">✓</span> {f}
+                  </li>
+                ))}
+              </ul>
+              <button className="w-full py-3.5 bg-brand-accent text-white rounded-xl font-semibold text-sm mt-1 cursor-pointer active:scale-[0.98] transition-transform">
+                Próximamente — Únete a la lista de espera
+              </button>
+            </div>
+
+            <button
+              onClick={() => setShowPaywall(false)}
+              className="text-sm text-brand-subtle text-center py-1 cursor-pointer hover:text-brand-fg transition-colors"
+            >
+              Volver
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ── Main content ───────────────────────────────────────────────────── */}
       <main className="flex-1 flex flex-col max-w-md mx-auto w-full">
@@ -315,9 +387,9 @@ export default function Home() {
                 <ArrowIcon />
               </button>
 
-              {/* Disclaimer */}
+              {/* Usage indicator */}
               <p className="text-center text-[11px] text-brand-subtle leading-relaxed">
-                Los precios son estimaciones orientativas basadas en datos de mercado.
+                {getRemainingUses()} de {DAILY_LIMIT} análisis gratuitos restantes hoy.
               </p>
             </div>
           </div>
