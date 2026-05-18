@@ -185,25 +185,31 @@ export default function Home() {
     setIsPro(data?.is_pro ?? false)
   }, [user])
 
-  // Cargar pro status cuando el usuario inicia sesión
-  useEffect(() => { if (isSignedIn) loadProStatus() }, [isSignedIn, loadProStatus])
-
-  // Detectar vuelta de Stripe con ?pro=success
+  // Detectar vuelta de Stripe con ?pro=success → guardar flag en localStorage
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     if (params.get('pro') === 'success') {
       window.history.replaceState({}, '', '/')
-      if (isSignedIn && user?.id) {
-        const email = user.primaryEmailAddress?.emailAddress
-        fetch('/api/sync-pro', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId: user.id, email }),
-        })
-          .then(r => r.json())
-          .then(data => { if (data.is_pro) setIsPro(true) })
-          .catch(() => setTimeout(() => loadProStatus(), 2000))
-      }
+      localStorage.setItem('resellsnap_sync_pro', '1')
+    }
+  }, [])
+
+  // Cuando el usuario está logueado, sincronizar Pro si hay flag pendiente
+  useEffect(() => {
+    if (!isSignedIn || !user?.id) return
+    loadProStatus()
+    const needsSync = localStorage.getItem('resellsnap_sync_pro')
+    if (needsSync) {
+      localStorage.removeItem('resellsnap_sync_pro')
+      const email = user.primaryEmailAddress?.emailAddress
+      fetch('/api/sync-pro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, email }),
+      })
+        .then(r => r.json())
+        .then(data => { if (data.is_pro) setIsPro(true) })
+        .catch(() => {})
     }
   }, [isSignedIn, user, loadProStatus])
 
