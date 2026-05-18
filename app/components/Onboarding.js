@@ -66,13 +66,16 @@ export default function Onboarding() {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {/* Background image */}
-      <img
-        key={s.image}
-        src={s.image}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
-      />
+      {/* Preload all images, only show active */}
+      {SLIDES.map((sl, i) => (
+        <img
+          key={sl.image}
+          src={sl.image}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+          style={{ opacity: i === slide ? 1 : 0 }}
+        />
+      ))}
 
       {/* Gradient overlay — stronger at bottom for text */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
