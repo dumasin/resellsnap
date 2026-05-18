@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useUser, SignInButton, UserButton } from '@clerk/nextjs'
 import { supabase } from '../lib/supabase'
+import Onboarding from './components/Onboarding'
 
 // ─── Usage limit ──────────────────────────────────────────────────────────────
 const DAILY_LIMIT = 5
@@ -326,6 +327,8 @@ export default function Home() {
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <div className="min-h-dvh bg-brand-bg flex flex-col">
+
+      <Onboarding />
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <header className="text-white px-4 h-14 flex items-center justify-between sticky top-0 z-20 flex-shrink-0" style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
