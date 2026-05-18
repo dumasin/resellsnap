@@ -53,7 +53,6 @@ export async function POST(request) {
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const hasKey = !!process.env.SUPABASE_SERVICE_ROLE_KEY
-  console.log('[webhook] supabase_url:', supabaseUrl, '| has_key:', hasKey)
 
   const supabase = getSupabase()
 
@@ -72,8 +71,10 @@ export async function POST(request) {
         { onConflict: 'user_id' }
       )
       if (error) {
-        console.error('[webhook] upsert error:', error.message)
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        return NextResponse.json({
+          error: error.message,
+          debug: { supabaseUrl, hasKey },
+        }, { status: 500 })
       }
     }
   }
