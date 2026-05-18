@@ -333,9 +333,7 @@ export default function Home() {
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <header className="text-white px-4 h-14 flex items-center justify-between sticky top-0 z-20 flex-shrink-0" style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}>
-            <LogoIcon />
-          </div>
+          <img src="/icon.png" alt="ResellSnap" className="w-8 h-8 rounded-lg flex-shrink-0" />
           <span className="font-extrabold text-lg tracking-tight">ResellSnap</span>
           {isPro && (
             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', color: 'white' }}>
