@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react'
 import { useUser, SignInButton, UserButton } from '@clerk/nextjs'
+import { supabase } from '../lib/supabase'
 
 // ─── Usage limit ──────────────────────────────────────────────────────────────
 const DAILY_LIMIT = 5
@@ -110,6 +111,8 @@ export default function Home() {
   const [showPaywall, setShowPaywall] = useState(false)
   const [waitlistEmail, setWaitlistEmail] = useState('')
   const [waitlistState, setWaitlistState] = useState('idle') // idle | loading | done | error
+  const [history, setHistory] = useState([])
+  const [showHistory, setShowHistory] = useState(false)
   const fileInputRef = useRef(null)
   const { isSignedIn, user } = useUser()
 
@@ -164,11 +167,40 @@ export default function Home() {
       setResults(data)
       setCondition(condition)
       setStage('results')
+      saveScan(data, condition)
     } catch (err) {
       setError(err.message)
       setStage('preview')
     }
   }, [imageData, condition])
+
+  // ── Supabase: guardar scan ───────────────────────────────────────────────────
+  const saveScan = useCallback(async (data, cond) => {
+    if (!user?.id) return
+    await supabase.from('scans').insert({
+      user_id: user.id,
+      item_name: data.item_name,
+      brand: data.brand,
+      category: data.category,
+      confidence: data.confidence,
+      condition: cond,
+      platforms: data.platforms,
+      best_platform: data.best_platform,
+      tip: data.tip,
+    })
+  }, [user])
+
+  // ── Supabase: cargar historial ───────────────────────────────────────────────
+  const loadHistory = useCallback(async () => {
+    if (!user?.id) return
+    const { data } = await supabase
+      .from('scans')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(30)
+    if (data) setHistory(data)
+  }, [user])
 
   // ── Waitlist ────────────────────────────────────────────────────────────────
   const handleWaitlist = useCallback(async (e) => {
@@ -240,6 +272,14 @@ export default function Home() {
             >
               <RefreshIcon />
               <span>Nueva foto</span>
+            </button>
+          )}
+          {isSignedIn && (
+            <button
+              onClick={() => { loadHistory(); setShowHistory(true) }}
+              className="text-xs font-semibold text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition-all cursor-pointer"
+            >
+              Historial
             </button>
           )}
           {isSignedIn ? (
@@ -323,6 +363,47 @@ export default function Home() {
             >
               Volver
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── History modal ──────────────────────────────────────────────────── */}
+      {showHistory && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-brand-bg max-w-md mx-auto">
+          <div className="flex items-center justify-between px-4 h-14 border-b border-brand-border bg-white flex-shrink-0">
+            <h2 className="font-bold text-brand-fg text-base">Mis análisis</h2>
+            <button onClick={() => setShowHistory(false)} className="text-sm text-brand-subtle hover:text-brand-fg cursor-pointer px-2 py-1">
+              Cerrar
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {history.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full gap-3 text-center py-20">
+                <p className="text-4xl">📷</p>
+                <p className="font-semibold text-brand-fg">Sin análisis todavía</p>
+                <p className="text-sm text-brand-subtle">Tus próximos scans aparecerán aquí</p>
+              </div>
+            ) : history.map((scan) => {
+              const condPrices = scan.platforms?.[scan.best_platform]?.[scan.condition]
+              const mid = condPrices ? Math.round((condPrices.min + condPrices.max) / 2) : null
+              const platform = PLATFORMS.find(p => p.id === scan.best_platform)
+              return (
+                <div key={scan.id} className="bg-white rounded-2xl border border-brand-border p-4 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-bold text-white"
+                    style={{ backgroundColor: platform?.color || '#64748B' }}>
+                    {platform?.abbr || '??'}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-sm text-brand-fg truncate">{scan.item_name}</p>
+                    <p className="text-xs text-brand-subtle">{scan.category} · {CONDITIONS.find(c => c.id === scan.condition)?.label}</p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    {mid ? <p className="font-bold text-sm text-brand-fg">~€{mid}</p> : null}
+                    <p className="text-[10px] text-brand-subtle">{new Date(scan.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</p>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       )}
