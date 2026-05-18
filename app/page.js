@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useUser, SignInButton, UserButton } from '@clerk/nextjs'
 import { supabase } from '../lib/supabase'
 
@@ -185,9 +185,29 @@ export default function Home() {
   }, [user])
 
   // Cargar pro status cuando el usuario inicia sesión
-  useState(() => { if (isSignedIn) loadProStatus() }, [isSignedIn])
+  useEffect(() => { if (isSignedIn) loadProStatus() }, [isSignedIn, loadProStatus])
+
+  // Detectar vuelta de Stripe con ?pro=success
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('pro') === 'success') {
+      window.history.replaceState({}, '', '/')
+      if (isSignedIn) setTimeout(() => loadProStatus(), 1500)
+    }
+  }, [isSignedIn, loadProStatus])
 
   // ── Checkout Stripe ──────────────────────────────────────────────────────────
+  const handlePortal = useCallback(async () => {
+    if (!user?.id) return
+    const res = await fetch('/api/portal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: user.id }),
+    })
+    const { url } = await res.json()
+    if (url) window.location.href = url
+  }, [user])
+
   const handleCheckout = useCallback(async () => {
     if (!isSignedIn) return
     setCheckoutError(null)
@@ -292,11 +312,16 @@ export default function Home() {
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <header className="text-white px-4 h-14 flex items-center justify-between sticky top-0 z-20 flex-shrink-0" style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}>
             <LogoIcon />
           </div>
           <span className="font-extrabold text-lg tracking-tight">ResellSnap</span>
+          {isPro && (
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', color: 'white' }}>
+              ✦ Pro
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-2">
           {stage !== 'capture' && (
@@ -314,6 +339,14 @@ export default function Home() {
               className="text-xs font-semibold text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition-all cursor-pointer"
             >
               Historial
+            </button>
+          )}
+          {isPro && (
+            <button
+              onClick={handlePortal}
+              className="text-xs font-semibold text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition-all cursor-pointer"
+            >
+              Suscripción
             </button>
           )}
           {!isPro && (
@@ -618,7 +651,10 @@ export default function Home() {
 
             {/* Free uses badge */}
             <p className="text-center text-xs text-brand-subtle">
-              <span className="font-semibold text-brand-fg">{DAILY_LIMIT} análisis gratis</span> al día · Sin tarjeta
+              {isPro
+                ? <span className="font-semibold" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>✦ Análisis ilimitados · Plan Pro activo</span>
+                : <><span className="font-semibold text-brand-fg">{DAILY_LIMIT} análisis gratis</span> al día · Sin tarjeta</>
+              }
             </p>
           </div>
         )}
