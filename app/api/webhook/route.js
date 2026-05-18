@@ -56,14 +56,16 @@ export async function POST(request) {
     const userId = session.metadata?.userId
     console.log('[/api/webhook] checkout.session.completed — userId:', userId, 'customer:', session.customer)
     if (userId) {
-      const { error } = await supabase.from('profiles').upsert({
+      const { data, error } = await supabase.from('profiles').upsert({
         user_id: userId,
         is_pro: true,
         stripe_customer_id: session.customer,
         stripe_subscription_id: session.subscription,
-      })
-      if (error) console.error('[/api/webhook] Supabase upsert error:', error.message)
-      else console.log('[/api/webhook] Profile updated to Pro for userId:', userId)
+      }, { onConflict: 'user_id' })
+      if (error) console.error('[/api/webhook] Supabase upsert error:', JSON.stringify(error))
+      else console.log('[/api/webhook] Profile updated OK:', JSON.stringify(data))
+    } else {
+      console.error('[/api/webhook] userId is null/undefined in metadata')
     }
   }
 
