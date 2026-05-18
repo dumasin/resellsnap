@@ -180,8 +180,9 @@ export default function Home() {
   // ── Cargar estado Pro ────────────────────────────────────────────────────────
   const loadProStatus = useCallback(async () => {
     if (!user?.id) return
-    const { data } = await supabase.from('profiles').select('is_pro').eq('user_id', user.id).single()
-    if (data?.is_pro) setIsPro(true)
+    const res = await fetch(`/api/profile?userId=${user.id}`)
+    const data = await res.json()
+    setIsPro(data?.is_pro ?? false)
   }, [user])
 
   // Cargar pro status cuando el usuario inicia sesión
