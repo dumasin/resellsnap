@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { GoogleGenAI } from '@google/genai'
 
 // ─── Gemini client ────────────────────────────────────────────────────────────
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
 
 // ─── System prompt ────────────────────────────────────────────────────────────
 const SYSTEM_PROMPT = `You are an expert in fashion and sneaker resell markets.
@@ -105,12 +105,6 @@ export async function POST(request) {
   }
 
   try {
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash-preview-05-20',
-      systemInstruction: SYSTEM_PROMPT,
-      generationConfig: { temperature: 0.2, maxOutputTokens: 1200 },
-    })
-
     // Strip the data URL prefix to get raw base64 + mime type
     const matches = image.match(/^data:(image\/[a-z]+);base64,(.+)$/)
     if (!matches) {
@@ -118,12 +112,25 @@ export async function POST(request) {
     }
     const [, mimeType, base64Data] = matches
 
-    const response = await model.generateContent([
-      { inlineData: { mimeType, data: base64Data } },
-      USER_PROMPT,
-    ])
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      config: {
+        systemInstruction: SYSTEM_PROMPT,
+        temperature: 0.2,
+        maxOutputTokens: 1200,
+      },
+      contents: [
+        {
+          role: 'user',
+          parts: [
+            { inlineData: { mimeType, data: base64Data } },
+            { text: USER_PROMPT },
+          ],
+        },
+      ],
+    })
 
-    const content = response.response.text()?.trim()
+    const content = response.text?.trim()
 
     if (!content) {
       throw new Error('Respuesta vacía de Gemini.')
