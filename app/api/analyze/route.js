@@ -130,17 +130,23 @@ export async function POST(request) {
       ],
     })
 
-    const content = response.text?.trim()
+    // New SDK: text can be a getter or nested in candidates
+    const raw = typeof response.text === 'function'
+      ? response.text()
+      : (response.text ?? response.candidates?.[0]?.content?.parts?.[0]?.text ?? '')
+    const content = raw?.trim()
+
+    console.log('[/api/analyze] Gemini raw response:', content?.slice(0, 300))
 
     if (!content) {
       throw new Error('Respuesta vacía de Gemini.')
     }
 
-    // Extract JSON from response (handles cases where model wraps in ```json)
+    // Extract JSON from response (handles markdown code blocks and thinking tokens)
     const jsonMatch = content.match(/\{[\s\S]*\}/)
     if (!jsonMatch) {
       console.error('No JSON found in response:', content)
-      throw new Error('No se pudo parsear la respuesta.')
+      throw new Error(`No se pudo parsear la respuesta. Respuesta recibida: ${content.slice(0, 200)}`)
     }
 
     const data = JSON.parse(jsonMatch[0])
