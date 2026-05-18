@@ -115,6 +115,7 @@ export default function Home() {
   const [showHistory, setShowHistory] = useState(false)
   const [isPro, setIsPro] = useState(false)
   const [showPricing, setShowPricing] = useState(false)
+  const [checkoutError, setCheckoutError] = useState(null)
   const fileInputRef = useRef(null)
   const { isSignedIn, user } = useUser()
 
@@ -189,13 +190,22 @@ export default function Home() {
   // ── Checkout Stripe ──────────────────────────────────────────────────────────
   const handleCheckout = useCallback(async () => {
     if (!isSignedIn) return
-    const res = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: user.id, email: user.primaryEmailAddress?.emailAddress }),
-    })
-    const { url } = await res.json()
-    if (url) window.location.href = url
+    setCheckoutError(null)
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id, email: user.primaryEmailAddress?.emailAddress }),
+      })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        setCheckoutError(data.error || 'Error al iniciar el pago.')
+      }
+    } catch {
+      setCheckoutError('Error de conexión. Inténtalo de nuevo.')
+    }
   }, [isSignedIn, user])
 
   // ── Supabase: guardar scan ───────────────────────────────────────────────────
@@ -454,13 +464,16 @@ export default function Home() {
             </div>
 
             {isSignedIn ? (
-              <button
-                onClick={() => { setShowPricing(false); handleCheckout() }}
-                className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform"
-                style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', boxShadow: '0 8px 24px -6px rgba(37,99,235,0.5)' }}
-              >
-                Hazte Pro — 7€/mes
-              </button>
+              <>
+                <button
+                  onClick={handleCheckout}
+                  className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform"
+                  style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', boxShadow: '0 8px 24px -6px rgba(37,99,235,0.5)' }}
+                >
+                  Hazte Pro — 7€/mes
+                </button>
+                {checkoutError && <p className="text-xs text-red-500 text-center -mt-2">{checkoutError}</p>}
+              </>
             ) : (
               <SignInButton mode="modal">
                 <button className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}>
