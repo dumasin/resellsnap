@@ -6,22 +6,19 @@ const STORAGE_KEY = 'resellsnap_onboarded'
 
 const SLIDES = [
   {
-    emoji: '📷',
+    image: '/onboarding-1.png',
     title: 'Fotografía cualquier artículo',
     desc: 'Haz una foto de tu prenda, sneaker o accesorio. La IA lo identifica al instante.',
-    bg: 'from-slate-900 to-blue-950',
   },
   {
-    emoji: '🤖',
+    image: '/onboarding-2.png',
     title: 'La IA analiza el mercado',
     desc: 'Identificamos marca, modelo y condición para buscar el precio real de reventa.',
-    bg: 'from-blue-950 to-violet-950',
   },
   {
-    emoji: '💶',
+    image: '/onboarding-3.png',
     title: 'Precios en 6 plataformas',
     desc: 'StockX, GOAT, Vinted, Depop, Wallapop y eBay. De un vistazo, sin buscar manualmente.',
-    bg: 'from-violet-950 to-slate-900',
   },
 ]
 
@@ -65,27 +62,37 @@ export default function Onboarding() {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-between px-6 pt-16 pb-12 bg-gradient-to-b ${s.bg} transition-all duration-500`}
+      className="fixed inset-0 z-50 flex flex-col"
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
+      {/* Background image */}
+      <img
+        key={s.image}
+        src={s.image}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+      />
+
+      {/* Gradient overlay — stronger at bottom for text */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
+
       {/* Skip */}
       <button
         onClick={finish}
-        className="absolute top-5 right-5 text-xs text-white/40 hover:text-white/70 transition-colors cursor-pointer"
+        className="absolute top-5 right-5 text-xs text-white/50 hover:text-white transition-colors cursor-pointer z-10"
       >
         Omitir
       </button>
 
-      {/* Content */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center gap-6 max-w-xs">
-        <div className="text-7xl">{s.emoji}</div>
-        <h2 className="text-2xl font-extrabold text-white leading-tight">{s.title}</h2>
-        <p className="text-base text-white/70 leading-relaxed">{s.desc}</p>
-      </div>
+      {/* Bottom content */}
+      <div className="relative z-10 mt-auto px-6 pb-12 flex flex-col items-center gap-6">
+        <div className="text-center space-y-3 max-w-xs">
+          <h2 className="text-2xl font-extrabold text-white leading-tight">{s.title}</h2>
+          <p className="text-base text-white/70 leading-relaxed">{s.desc}</p>
+        </div>
 
-      {/* Dots + CTA */}
-      <div className="flex flex-col items-center gap-6 w-full max-w-xs">
+        {/* Dots */}
         <div className="flex gap-2">
           {SLIDES.map((_, i) => (
             <button
@@ -100,7 +107,7 @@ export default function Onboarding() {
 
         <button
           onClick={next}
-          className="w-full py-4 rounded-2xl font-bold text-base cursor-pointer active:scale-[0.98] transition-transform text-white"
+          className="w-full max-w-xs py-4 rounded-2xl font-bold text-base cursor-pointer active:scale-[0.98] transition-transform text-white"
           style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}
         >
           {isLast ? 'Empezar' : 'Siguiente'}
