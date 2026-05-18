@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback } from 'react'
 
 // ─── Usage limit ──────────────────────────────────────────────────────────────
-const DAILY_LIMIT = 2
+const DAILY_LIMIT = 5
 const STORAGE_KEY = 'resellsnap_usage'
 
 function getUsage() {
