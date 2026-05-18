@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
+import { useUser, SignInButton, UserButton } from '@clerk/nextjs'
 
 // ─── Usage limit ──────────────────────────────────────────────────────────────
 const DAILY_LIMIT = 5
@@ -107,7 +108,10 @@ export default function Home() {
   const [condition, setCondition] = useState('like_new')
   const [error, setError] = useState(null)
   const [showPaywall, setShowPaywall] = useState(false)
+  const [waitlistEmail, setWaitlistEmail] = useState('')
+  const [waitlistState, setWaitlistState] = useState('idle') // idle | loading | done | error
   const fileInputRef = useRef(null)
+  const { isSignedIn, user } = useUser()
 
   // ── Image handling ──────────────────────────────────────────────────────────
   const handleImageSelect = useCallback((e) => {
@@ -166,6 +170,23 @@ export default function Home() {
     }
   }, [imageData, condition])
 
+  // ── Waitlist ────────────────────────────────────────────────────────────────
+  const handleWaitlist = useCallback(async (e) => {
+    e.preventDefault()
+    if (!waitlistEmail) return
+    setWaitlistState('loading')
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: waitlistEmail }),
+      })
+      setWaitlistState(res.ok ? 'done' : 'error')
+    } catch {
+      setWaitlistState('error')
+    }
+  }, [waitlistEmail])
+
   // ── Reset ───────────────────────────────────────────────────────────────────
   const handleReset = useCallback(() => {
     setStage('capture')
@@ -211,15 +232,26 @@ export default function Home() {
           </div>
           <span className="font-bold text-lg tracking-tight">ResellSnap</span>
         </div>
-        {stage !== 'capture' && (
-          <button
-            onClick={handleReset}
-            className="flex items-center gap-1.5 text-sm text-slate-300 hover:text-white transition-colors cursor-pointer py-1 px-2 rounded-lg hover:bg-white/10"
-          >
-            <RefreshIcon />
-            <span>Nueva foto</span>
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {stage !== 'capture' && (
+            <button
+              onClick={handleReset}
+              className="flex items-center gap-1.5 text-sm text-slate-300 hover:text-white transition-colors cursor-pointer py-1 px-2 rounded-lg hover:bg-white/10"
+            >
+              <RefreshIcon />
+              <span>Nueva foto</span>
+            </button>
+          )}
+          {isSignedIn ? (
+            <UserButton afterSignOutUrl="/" />
+          ) : (
+            <SignInButton mode="modal">
+              <button className="text-xs font-semibold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-white/20 hover:bg-white/10 transition-all cursor-pointer">
+                Iniciar sesión
+              </button>
+            </SignInButton>
+          )}
+        </div>
       </header>
 
       {/* ── Paywall modal ──────────────────────────────────────────────────── */}
@@ -245,10 +277,45 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <button className="w-full py-3.5 bg-brand-accent text-white rounded-xl font-semibold text-sm mt-1 cursor-pointer active:scale-[0.98] transition-transform">
-                Próximamente — Únete a la lista de espera
-              </button>
+
+              {waitlistState === 'done' ? (
+                <div className="bg-green-500/20 rounded-xl p-3 text-center text-sm text-green-300 font-medium">
+                  ✓ Apuntado. Te avisaremos cuando Pro esté disponible.
+                </div>
+              ) : (
+                <form onSubmit={handleWaitlist} className="flex flex-col gap-2 mt-1">
+                  <input
+                    type="email"
+                    placeholder="tu@email.com"
+                    value={waitlistEmail}
+                    onChange={(e) => setWaitlistEmail(e.target.value)}
+                    required
+                    className="w-full px-3 py-2.5 rounded-xl bg-white/10 text-white placeholder-slate-400 text-sm border border-white/10 focus:outline-none focus:border-blue-400"
+                  />
+                  <button
+                    type="submit"
+                    disabled={waitlistState === 'loading'}
+                    className="w-full py-3 bg-brand-accent text-white rounded-xl font-semibold text-sm cursor-pointer active:scale-[0.98] transition-transform disabled:opacity-60"
+                  >
+                    {waitlistState === 'loading' ? 'Enviando…' : 'Únete a la lista de espera'}
+                  </button>
+                  {waitlistState === 'error' && (
+                    <p className="text-xs text-red-400 text-center">Error al registrar. Inténtalo de nuevo.</p>
+                  )}
+                </form>
+              )}
             </div>
+
+            {!isSignedIn && (
+              <div className="text-center">
+                <p className="text-xs text-brand-subtle mb-2">¿Ya tienes cuenta?</p>
+                <SignInButton mode="modal">
+                  <button className="text-sm font-semibold text-brand-accent cursor-pointer hover:underline">
+                    Inicia sesión para gestionar tus análisis
+                  </button>
+                </SignInButton>
+              </div>
+            )}
 
             <button
               onClick={() => setShowPaywall(false)}
