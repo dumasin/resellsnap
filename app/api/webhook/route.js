@@ -1,11 +1,5 @@
 import { NextResponse } from 'next/server'
 import { createHmac, timingSafeEqual } from 'crypto'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-)
 
 function verifyStripeSignature(payload, sigHeader, secret) {
   const parts = sigHeader.split(',').reduce((acc, part) => {
@@ -29,6 +23,51 @@ function verifyStripeSignature(payload, sigHeader, secret) {
   }
 }
 
+function supabaseHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY,
+    'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+  }
+}
+
+const BASE = () => `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1`
+
+async function upsertProfile({ userId, isPro, customerId, subscriptionId }) {
+  // Try update first
+  const updateRes = await fetch(
+    `${BASE()}/profiles?user_id=eq.${encodeURIComponent(userId)}`,
+    {
+      method: 'PATCH',
+      headers: { ...supabaseHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({
+        is_pro: isPro,
+        stripe_customer_id: customerId,
+        stripe_subscription_id: subscriptionId,
+      }),
+    }
+  )
+
+  // If no rows updated (204 but 0 rows), insert
+  const count = updateRes.headers.get('content-range')
+  if (count === '*/0' || count === null) {
+    const insertRes = await fetch(`${BASE()}/profiles`, {
+      method: 'POST',
+      headers: { ...supabaseHeaders(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({
+        user_id: userId,
+        is_pro: isPro,
+        stripe_customer_id: customerId,
+        stripe_subscription_id: subscriptionId,
+      }),
+    })
+    const text = await insertRes.text()
+    return { status: insertRes.status, body: text, op: 'insert' }
+  }
+
+  return { status: updateRes.status, op: 'update' }
+}
+
 export async function POST(request) {
   const body = await request.text()
   const sig = request.headers.get('stripe-signature')
@@ -38,7 +77,6 @@ export async function POST(request) {
   }
 
   if (!verifyStripeSignature(body, sig, process.env.STRIPE_WEBHOOK_SECRET)) {
-    console.error('[/api/webhook] Signature verification failed')
     return NextResponse.json({ error: 'Webhook signature invalid.' }, { status: 400 })
   }
 
@@ -49,53 +87,35 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 })
   }
 
-  const debug = {
-    eventType: event.type,
-    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL?.slice(0, 40),
-    hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-  }
+  const debug = { eventType: event.type }
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object
     const userId = session.metadata?.userId
     debug.userId = userId
-    debug.customer = session.customer
-    debug.metadata = session.metadata
 
     if (userId) {
-      const { data: existing } = await supabase
-        .from('profiles')
-        .select('user_id')
-        .eq('user_id', userId)
-        .maybeSingle()
-
-      let error
-      if (existing) {
-        ;({ error } = await supabase.from('profiles').update({
-          is_pro: true,
-          stripe_customer_id: session.customer,
-          stripe_subscription_id: session.subscription,
-        }).eq('user_id', userId))
-      } else {
-        ;({ error } = await supabase.from('profiles').insert({
-          user_id: userId,
-          is_pro: true,
-          stripe_customer_id: session.customer,
-          stripe_subscription_id: session.subscription,
-        }))
-      }
-      debug.supabaseError = error ? JSON.stringify(error) : null
-      debug.existed = !!existing
+      const result = await upsertProfile({
+        userId,
+        isPro: true,
+        customerId: session.customer,
+        subscriptionId: session.subscription,
+      })
+      debug.result = result
     }
   }
 
   if (event.type === 'customer.subscription.deleted') {
     const sub = event.data.object
-    const { error } = await supabase
-      .from('profiles')
-      .update({ is_pro: false })
-      .eq('stripe_subscription_id', sub.id)
-    debug.supabaseError = error ? JSON.stringify(error) : null
+    const res = await fetch(
+      `${BASE()}/profiles?stripe_subscription_id=eq.${encodeURIComponent(sub.id)}`,
+      {
+        method: 'PATCH',
+        headers: { ...supabaseHeaders(), 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ is_pro: false }),
+      }
+    )
+    debug.result = { status: res.status }
   }
 
   return NextResponse.json({ received: true, debug })
