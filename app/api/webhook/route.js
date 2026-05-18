@@ -74,14 +74,15 @@ export async function POST(request) {
     }
   }
 
-  if (event.type === 'customer.subscription.deleted') {
+  if (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted') {
     const sub = event.data.object
+    const isPro = sub.status === 'active' || sub.status === 'trialing'
     const { error } = await supabase
       .from('profiles')
-      .update({ is_pro: false })
+      .update({ is_pro: isPro })
       .eq('stripe_subscription_id', sub.id)
     if (error) {
-      console.error('[webhook] subscription delete error:', error.message)
+      console.error('[webhook] subscription update error:', error.message)
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
   }
