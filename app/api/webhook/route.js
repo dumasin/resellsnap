@@ -51,6 +51,10 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 })
   }
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const hasKey = !!process.env.SUPABASE_SERVICE_ROLE_KEY
+  console.log('[webhook] supabase_url:', supabaseUrl, '| has_key:', hasKey)
+
   const supabase = getSupabase()
 
   if (event.type === 'checkout.session.completed') {
