@@ -49,12 +49,15 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 })
   }
 
-  console.log('[/api/webhook] Event received:', event.type)
+  const debug = { eventType: event.type }
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object
     const userId = session.metadata?.userId
-    console.log('[/api/webhook] checkout.session.completed — userId:', userId, 'customer:', session.customer)
+    debug.userId = userId
+    debug.customer = session.customer
+    debug.metadata = session.metadata
+
     if (userId) {
       const { data, error } = await supabase.from('profiles').upsert({
         user_id: userId,
@@ -62,22 +65,19 @@ export async function POST(request) {
         stripe_customer_id: session.customer,
         stripe_subscription_id: session.subscription,
       }, { onConflict: 'user_id' })
-      if (error) console.error('[/api/webhook] Supabase upsert error:', JSON.stringify(error))
-      else console.log('[/api/webhook] Profile updated OK:', JSON.stringify(data))
-    } else {
-      console.error('[/api/webhook] userId is null/undefined in metadata')
+      debug.supabaseError = error ? JSON.stringify(error) : null
+      debug.supabaseData = data ? JSON.stringify(data) : null
     }
   }
 
   if (event.type === 'customer.subscription.deleted') {
     const sub = event.data.object
-    console.log('[/api/webhook] subscription.deleted — sub.id:', sub.id)
     const { error } = await supabase
       .from('profiles')
       .update({ is_pro: false })
       .eq('stripe_subscription_id', sub.id)
-    if (error) console.error('[/api/webhook] Supabase update error:', error.message)
+    debug.supabaseError = error ? JSON.stringify(error) : null
   }
 
-  return NextResponse.json({ received: true })
+  return NextResponse.json({ received: true, debug })
 }
