@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import OpenAI from 'openai'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
-// ─── OpenAI client ────────────────────────────────────────────────────────────
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+// ─── Gemini client ────────────────────────────────────────────────────────────
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
 // ─── System prompt ────────────────────────────────────────────────────────────
 const SYSTEM_PROMPT = `You are an expert in fashion and sneaker resell markets.
@@ -80,9 +80,9 @@ const USER_PROMPT = `Identify this item and return a JSON object with this EXACT
 // ─── Route handler ────────────────────────────────────────────────────────────
 export async function POST(request) {
   // Validate API key
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     return NextResponse.json(
-      { error: 'OPENAI_API_KEY no configurada. Añádela en las variables de entorno.' },
+      { error: 'GEMINI_API_KEY no configurada. Añádela en las variables de entorno.' },
       { status: 500 }
     )
   }
@@ -105,32 +105,28 @@ export async function POST(request) {
   }
 
   try {
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        {
-          role: 'user',
-          content: [
-            {
-              type: 'image_url',
-              image_url: { url: image, detail: 'high' },
-            },
-            {
-              type: 'text',
-              text: USER_PROMPT,
-            },
-          ],
-        },
-      ],
-      max_tokens: 1200,
-      temperature: 0.2, // Low temp for consistent, factual pricing
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-1.5-flash',
+      systemInstruction: SYSTEM_PROMPT,
+      generationConfig: { temperature: 0.2, maxOutputTokens: 1200 },
     })
 
-    const content = response.choices[0]?.message?.content?.trim()
+    // Strip the data URL prefix to get raw base64 + mime type
+    const matches = image.match(/^data:(image\/[a-z]+);base64,(.+)$/)
+    if (!matches) {
+      return NextResponse.json({ error: 'Formato de imagen no válido.' }, { status: 400 })
+    }
+    const [, mimeType, base64Data] = matches
+
+    const response = await model.generateContent([
+      { inlineData: { mimeType, data: base64Data } },
+      USER_PROMPT,
+    ])
+
+    const content = response.response.text()?.trim()
 
     if (!content) {
-      throw new Error('Respuesta vacía de OpenAI.')
+      throw new Error('Respuesta vacía de Gemini.')
     }
 
     // Extract JSON from response (handles cases where model wraps in ```json)
@@ -152,18 +148,18 @@ export async function POST(request) {
   } catch (err) {
     console.error('[/api/analyze] Error:', err)
 
-    // OpenAI rate limit
-    if (err?.status === 429) {
+    // Gemini rate limit
+    if (err?.status === 429 || err?.message?.includes('429')) {
       return NextResponse.json(
         { error: 'Demasiadas peticiones. Espera un momento e inténtalo de nuevo.' },
         { status: 429 }
       )
     }
 
-    // OpenAI auth error
-    if (err?.status === 401) {
+    // Gemini auth error
+    if (err?.status === 401 || err?.status === 403) {
       return NextResponse.json(
-        { error: 'API key de OpenAI inválida. Verifica tu configuración.' },
+        { error: 'GEMINI_API_KEY inválida. Verifica tu configuración.' },
         { status: 401 }
       )
     }
