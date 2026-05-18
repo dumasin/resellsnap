@@ -113,6 +113,7 @@ export default function Home() {
   const [waitlistState, setWaitlistState] = useState('idle') // idle | loading | done | error
   const [history, setHistory] = useState([])
   const [showHistory, setShowHistory] = useState(false)
+  const [isPro, setIsPro] = useState(false)
   const fileInputRef = useRef(null)
   const { isSignedIn, user } = useUser()
 
@@ -146,7 +147,7 @@ export default function Home() {
 
   // ── Analyze ─────────────────────────────────────────────────────────────────
   const handleAnalyze = useCallback(async () => {
-    if (getRemainingUses() <= 0) {
+    if (!isPro && getRemainingUses() <= 0) {
       setShowPaywall(true)
       return
     }
@@ -173,6 +174,28 @@ export default function Home() {
       setStage('preview')
     }
   }, [imageData, condition])
+
+  // ── Cargar estado Pro ────────────────────────────────────────────────────────
+  const loadProStatus = useCallback(async () => {
+    if (!user?.id) return
+    const { data } = await supabase.from('profiles').select('is_pro').eq('user_id', user.id).single()
+    if (data?.is_pro) setIsPro(true)
+  }, [user])
+
+  // Cargar pro status cuando el usuario inicia sesión
+  useState(() => { if (isSignedIn) loadProStatus() }, [isSignedIn])
+
+  // ── Checkout Stripe ──────────────────────────────────────────────────────────
+  const handleCheckout = useCallback(async () => {
+    if (!isSignedIn) return
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: user.id, email: user.primaryEmailAddress?.emailAddress }),
+    })
+    const { url } = await res.json()
+    if (url) window.location.href = url
+  }, [isSignedIn, user])
 
   // ── Supabase: guardar scan ───────────────────────────────────────────────────
   const saveScan = useCallback(async (data, cond) => {
@@ -332,13 +355,23 @@ export default function Home() {
                     required
                     className="w-full px-3 py-2.5 rounded-xl bg-white/10 text-white placeholder-slate-400 text-sm border border-white/10 focus:outline-none focus:border-blue-400"
                   />
-                  <button
-                    type="submit"
-                    disabled={waitlistState === 'loading'}
-                    className="w-full py-3 bg-brand-accent text-white rounded-xl font-semibold text-sm cursor-pointer active:scale-[0.98] transition-transform disabled:opacity-60"
-                  >
-                    {waitlistState === 'loading' ? 'Enviando…' : 'Únete a la lista de espera'}
-                  </button>
+                  {isSignedIn ? (
+                    <button
+                      type="button"
+                      onClick={handleCheckout}
+                      className="w-full py-3 bg-brand-accent text-white rounded-xl font-semibold text-sm cursor-pointer active:scale-[0.98] transition-transform"
+                    >
+                      Hazte Pro — 7€/mes
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      disabled={waitlistState === 'loading'}
+                      className="w-full py-3 bg-brand-accent text-white rounded-xl font-semibold text-sm cursor-pointer active:scale-[0.98] transition-transform disabled:opacity-60"
+                    >
+                      {waitlistState === 'loading' ? 'Enviando…' : 'Únete a la lista de espera'}
+                    </button>
+                  )}
                   {waitlistState === 'error' && (
                     <p className="text-xs text-red-400 text-center">Error al registrar. Inténtalo de nuevo.</p>
                   )}
