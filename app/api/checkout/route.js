@@ -9,7 +9,7 @@ export async function POST(request) {
     return NextResponse.json({ error: 'STRIPE_PRICE_ID no configurada.' }, { status: 500 })
   }
 
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' })
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
   let userId, email
   try {
