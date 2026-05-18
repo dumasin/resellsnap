@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer utilities {
+  .min-h-dvh {
+    min-height: 100dvh;
+  }
+
+  .h-dvh {
+    height: 100dvh;
+  }
+}
+
+/* Scan line animation overlay */
+.scan-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-line {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #2563EB 30%, #60A5FA 50%, #2563EB 70%, transparent 100%);
+  border-radius: 2px;
+  animation: scan 2s ease-in-out infinite;
+  box-shadow: 0 0 12px 2px rgba(37, 99, 235, 0.5);
+}
+
+@keyframes scan {
+  0%   { top: 15%; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 85%; opacity: 0; }
+}
+
+/* Shimmer skeleton */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #f1f2f3 0px,
+    #e2e8f0 40px,
+    #f1f2f3 80px
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+
+/* Corner brackets for scan viewfinder */
+.scan-corner::before,
+.scan-corner::after,
+.scan-corner > span::before,
+.scan-corner > span::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: #2563EB;
+  border-style: solid;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove default button styles on iOS */
+button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Prevent overscroll bounce for app feel */
+body {
+  overscroll-behavior: none;
+  background-color: #F8FAFC;
+}
