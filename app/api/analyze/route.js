@@ -117,7 +117,7 @@ export async function POST(request) {
       config: {
         systemInstruction: SYSTEM_PROMPT,
         temperature: 0.2,
-        maxOutputTokens: 1200,
+        maxOutputTokens: 4000,
       },
       contents: [
         {
