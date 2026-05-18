@@ -148,15 +148,13 @@ export async function POST(request) {
   } catch (err) {
     console.error('[/api/analyze] Error:', err)
 
-    // Gemini rate limit
-    if (err?.status === 429 || err?.message?.includes('429')) {
+    if (err?.status === 429) {
       return NextResponse.json(
         { error: 'Demasiadas peticiones. Espera un momento e inténtalo de nuevo.' },
         { status: 429 }
       )
     }
 
-    // Gemini auth error
     if (err?.status === 401 || err?.status === 403) {
       return NextResponse.json(
         { error: 'GEMINI_API_KEY inválida. Verifica tu configuración.' },
@@ -164,7 +162,6 @@ export async function POST(request) {
       )
     }
 
-    // JSON parse error
     if (err instanceof SyntaxError) {
       return NextResponse.json(
         { error: 'Error al procesar la respuesta. Inténtalo de nuevo.' },
