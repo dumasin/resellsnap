@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createHmac, timingSafeEqual } from 'crypto'
+import { createClient } from '@supabase/supabase-js'
 
 function verifyStripeSignature(payload, sigHeader, secret) {
   const parts = sigHeader.split(',').reduce((acc, part) => {
@@ -23,49 +24,12 @@ function verifyStripeSignature(payload, sigHeader, secret) {
   }
 }
 
-function supabaseHeaders() {
-  return {
-    'Content-Type': 'application/json',
-    'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY,
-    'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
-  }
-}
-
-const BASE = () => `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1`
-
-async function upsertProfile({ userId, isPro, customerId, subscriptionId }) {
-  // Try update first
-  const updateRes = await fetch(
-    `${BASE()}/profiles?user_id=eq.${encodeURIComponent(userId)}`,
-    {
-      method: 'PATCH',
-      headers: { ...supabaseHeaders(), 'Prefer': 'return=minimal' },
-      body: JSON.stringify({
-        is_pro: isPro,
-        stripe_customer_id: customerId,
-        stripe_subscription_id: subscriptionId,
-      }),
-    }
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    { auth: { persistSession: false } }
   )
-
-  // If no rows updated (204 but 0 rows), insert
-  const count = updateRes.headers.get('content-range')
-  if (count === '*/0' || count === null) {
-    const insertRes = await fetch(`${BASE()}/profiles`, {
-      method: 'POST',
-      headers: { ...supabaseHeaders(), 'Prefer': 'return=minimal' },
-      body: JSON.stringify({
-        user_id: userId,
-        is_pro: isPro,
-        stripe_customer_id: customerId,
-        stripe_subscription_id: subscriptionId,
-      }),
-    })
-    const text = await insertRes.text()
-    return { status: insertRes.status, body: text, op: 'insert' }
-  }
-
-  return { status: updateRes.status, op: 'update' }
 }
 
 export async function POST(request) {
@@ -87,36 +51,40 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 })
   }
 
-  const debug = { eventType: event.type }
+  const supabase = getSupabase()
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object
     const userId = session.metadata?.userId
-    debug.userId = userId
 
     if (userId) {
-      const result = await upsertProfile({
-        userId,
-        isPro: true,
-        customerId: session.customer,
-        subscriptionId: session.subscription,
-      })
-      debug.result = result
+      const { error } = await supabase.from('profiles').upsert(
+        {
+          user_id: userId,
+          is_pro: true,
+          stripe_customer_id: session.customer,
+          stripe_subscription_id: session.subscription,
+        },
+        { onConflict: 'user_id' }
+      )
+      if (error) {
+        console.error('[webhook] upsert error:', error.message)
+        return NextResponse.json({ error: error.message }, { status: 500 })
+      }
     }
   }
 
   if (event.type === 'customer.subscription.deleted') {
     const sub = event.data.object
-    const res = await fetch(
-      `${BASE()}/profiles?stripe_subscription_id=eq.${encodeURIComponent(sub.id)}`,
-      {
-        method: 'PATCH',
-        headers: { ...supabaseHeaders(), 'Prefer': 'return=minimal' },
-        body: JSON.stringify({ is_pro: false }),
-      }
-    )
-    debug.result = { status: res.status }
+    const { error } = await supabase
+      .from('profiles')
+      .update({ is_pro: false })
+      .eq('stripe_subscription_id', sub.id)
+    if (error) {
+      console.error('[webhook] subscription delete error:', error.message)
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
   }
 
-  return NextResponse.json({ received: true, debug })
+  return NextResponse.json({ received: true })
 }
