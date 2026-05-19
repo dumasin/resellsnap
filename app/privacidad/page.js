@@ -12,8 +12,8 @@ export default function Privacidad() {
 
         <div>
           <h2 className="font-bold text-slate-900 text-base mb-2">1. Responsable del tratamiento</h2>
-          <p>Tomás Barril Ríos, en adelante "ResellSnap", es el responsable del tratamiento de los datos personales recogidos a través de la aplicación <strong>resellsnap.vercel.app</strong>.</p>
-          <p className="mt-2">Contacto: <a href="mailto:privacidad@resellsnap.app" className="text-blue-600 hover:underline">privacidad@resellsnap.app</a></p>
+          <p>Tomás Barril Ríos, en adelante "ResellSnap", es el responsable del tratamiento de los datos personales recogidos a través de la aplicación <strong>resellsnap.es</strong>.</p>
+          <p className="mt-2">Contacto: <a href="mailto:privacidad@resellsnap.es" className="text-blue-600 hover:underline">privacidad@resellsnap.es</a></p>
         </div>
 
         <div>
@@ -54,7 +54,7 @@ export default function Privacidad() {
 
         <div>
           <h2 className="font-bold text-slate-900 text-base mb-2">6. Tus derechos (RGPD)</h2>
-          <p>Tienes derecho a acceder, rectificar, suprimir, limitar y portar tus datos, así como a oponerte a su tratamiento. Para ejercer estos derechos escríbenos a <a href="mailto:privacidad@resellsnap.app" className="text-blue-600 hover:underline">privacidad@resellsnap.app</a>. También puedes presentar una reclamación ante la Agencia Española de Protección de Datos (aepd.es).</p>
+          <p>Tienes derecho a acceder, rectificar, suprimir, limitar y portar tus datos, así como a oponerte a su tratamiento. Para ejercer estos derechos escríbenos a <a href="mailto:privacidad@resellsnap.es" className="text-blue-600 hover:underline">privacidad@resellsnap.es</a>. También puedes presentar una reclamación ante la Agencia Española de Protección de Datos (aepd.es).</p>
         </div>
 
         <div>

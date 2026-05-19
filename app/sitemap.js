@@ -1,4 +1,4 @@
-const BASE_URL = 'https://resellsnap.vercel.app'
+const BASE_URL = 'https://resellsnap.es'
 
 export default function sitemap() {
   return [

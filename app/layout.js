@@ -4,7 +4,7 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
-const APP_URL = 'https://resellsnap.vercel.app'
+const APP_URL = 'https://resellsnap.es'
 
 export const metadata = {
   title: 'ResellSnap – Precio de reventa al instante',

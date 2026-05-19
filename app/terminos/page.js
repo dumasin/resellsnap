@@ -12,7 +12,7 @@ export default function Terminos() {
 
         <div>
           <h2 className="font-bold text-slate-900 text-base mb-2">1. Aceptación</h2>
-          <p>Al acceder o usar ResellSnap (<strong>resellsnap.vercel.app</strong>), aceptas estos Términos. Si no estás de acuerdo, no uses el servicio. El servicio es operado por Tomás Barril Ríos.</p>
+          <p>Al acceder o usar ResellSnap (<strong>resellsnap.es</strong>), aceptas estos Términos. Si no estás de acuerdo, no uses el servicio. El servicio es operado por Tomás Barril Ríos.</p>
         </div>
 
         <div>
@@ -31,7 +31,7 @@ export default function Terminos() {
 
         <div>
           <h2 className="font-bold text-slate-900 text-base mb-2">4. Política de reembolso</h2>
-          <p>Ofrecemos reembolso completo dentro de los <strong>7 días</strong> siguientes al primer cargo si el servicio no funciona correctamente. Fuera de ese plazo, no se realizan reembolsos por períodos ya consumidos. Para solicitar un reembolso escríbenos a <a href="mailto:soporte@resellsnap.app" className="text-blue-600 hover:underline">soporte@resellsnap.app</a>.</p>
+          <p>Ofrecemos reembolso completo dentro de los <strong>7 días</strong> siguientes al primer cargo si el servicio no funciona correctamente. Fuera de ese plazo, no se realizan reembolsos por períodos ya consumidos. Para solicitar un reembolso escríbenos a <a href="mailto:soporte@resellsnap.es" className="text-blue-600 hover:underline">soporte@resellsnap.es</a>.</p>
         </div>
 
         <div>
@@ -66,7 +66,7 @@ export default function Terminos() {
 
         <div>
           <h2 className="font-bold text-slate-900 text-base mb-2">10. Contacto</h2>
-          <p><a href="mailto:soporte@resellsnap.app" className="text-blue-600 hover:underline">soporte@resellsnap.app</a></p>
+          <p><a href="mailto:soporte@resellsnap.es" className="text-blue-600 hover:underline">soporte@resellsnap.es</a></p>
         </div>
 
       </section>

@@ -982,7 +982,7 @@ export default function Home() {
       <footer className="flex-shrink-0 py-4 px-5 flex justify-center gap-5 border-t border-brand-border">
         <a href="/privacidad" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">Privacidad</a>
         <a href="/terminos" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">Términos</a>
-        <a href="mailto:soporte@resellsnap.app" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">Contacto</a>
+        <a href="mailto:soporte@resellsnap.es" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">Contacto</a>
       </footer>
 
     </div>
