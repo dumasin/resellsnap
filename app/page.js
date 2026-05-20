@@ -33,7 +33,7 @@ function getRemainingUses() {
 }
 
 // ─── Platform config ─────────────────────────────────────────────────────────
-const PLATFORMS = [
+const PLATFORMS_ES = [
   { id: 'stockx',   name: 'StockX',   abbr: 'SX', color: '#00B81D', bg: '#f0fdf4', badge: 'Autenticado' },
   { id: 'goat',     name: 'GOAT',     abbr: 'GT', color: '#1a1a1a', bg: '#f8f8f8', badge: 'Autenticado' },
   { id: 'depop',    name: 'Depop',    abbr: 'DP', color: '#FF2300', bg: '#fff1f0', badge: null },
@@ -42,12 +42,182 @@ const PLATFORMS = [
   { id: 'ebay',     name: 'eBay',     abbr: 'EB', color: '#3665F3', bg: '#eff6ff', badge: 'Global' },
 ]
 
-const CONDITIONS = [
+const PLATFORMS_EN = [
+  { id: 'stockx',   name: 'StockX',   abbr: 'SX', color: '#00B81D', bg: '#f0fdf4', badge: 'Authenticated' },
+  { id: 'goat',     name: 'GOAT',     abbr: 'GT', color: '#1a1a1a', bg: '#f8f8f8', badge: 'Authenticated' },
+  { id: 'depop',    name: 'Depop',    abbr: 'DP', color: '#FF2300', bg: '#fff1f0', badge: null },
+  { id: 'grailed',  name: 'Grailed',  abbr: 'GR', color: '#FF3366', bg: '#fff0f4', badge: 'Streetwear' },
+  { id: 'poshmark', name: 'Poshmark', abbr: 'PM', color: '#E0003B', bg: '#fff0f3', badge: null },
+  { id: 'ebay',     name: 'eBay',     abbr: 'EB', color: '#3665F3', bg: '#eff6ff', badge: 'Global' },
+]
+
+const CONDITIONS_ES = [
   { id: 'new',      label: 'Nuevo',       desc: 'Sin usar, con caja/etiquetas' },
   { id: 'like_new', label: 'Como nuevo',  desc: 'Sin uso visible' },
   { id: 'good',     label: 'Buen estado', desc: 'Uso moderado' },
   { id: 'fair',     label: 'Aceptable',   desc: 'Signos de uso claros' },
 ]
+
+const CONDITIONS_EN = [
+  { id: 'new',      label: 'New',       desc: 'Unworn, with box/tags' },
+  { id: 'like_new', label: 'Like New',  desc: 'No visible wear' },
+  { id: 'good',     label: 'Good',      desc: 'Moderate use' },
+  { id: 'fair',     label: 'Fair',      desc: 'Visible signs of use' },
+]
+
+// ─── Translations ─────────────────────────────────────────────────────────────
+const STRINGS = {
+  es: {
+    newPhoto: 'Nueva foto',
+    history: 'Historial',
+    subscription: 'Suscripción',
+    signIn: 'Iniciar sesión',
+    paywallTitle: 'Límite mensual alcanzado',
+    paywallDesc1: `Has usado tus ${MONTHLY_LIMIT} análisis gratuitos del mes.`,
+    paywallDesc2: 'Vuelve el próximo mes o hazte Pro para análisis ilimitados.',
+    proFeatures: ['Análisis ilimitados', 'Historial de escaneos', 'Acceso prioritario a nuevas funciones'],
+    addedToWaitlist: '✓ Apuntado. Te avisaremos cuando Pro esté disponible.',
+    emailPlaceholder: 'tu@email.com',
+    goPro: 'Hazte Pro — 7€/mes',
+    joinWaitlist: 'Únete a la lista de espera',
+    sending: 'Enviando…',
+    waitlistError: 'Error al registrar. Inténtalo de nuevo.',
+    alreadyAccount: '¿Ya tienes cuenta?',
+    signInManage: 'Inicia sesión para gestionar tus análisis',
+    back: 'Volver',
+    choosePlan: 'Elige tu plan',
+    noCommitment: 'Sin permanencia. Cancela cuando quieras.',
+    freePrice: '0€',
+    forever: 'para siempre',
+    analysesPerMonth: '5 análisis/mes',
+    sixPlatforms: '6 plataformas',
+    historyLabel: 'Historial',
+    noLimitsLabel: 'Sin límites',
+    proPrice: '7€',
+    perMonth: 'al mes',
+    unlimited: 'Ilimitados',
+    goProBtn: 'Hazte Pro — 7€/mes',
+    signInSubscribe: 'Inicia sesión para suscribirte',
+    notNow: 'Ahora no',
+    myAnalyses: 'Mis análisis',
+    close: 'Cerrar',
+    noAnalyses: 'Sin análisis todavía',
+    noAnalysesDesc: 'Tus próximos scans aparecerán aquí',
+    realtimeAI: 'IA en tiempo real',
+    heroLine1: '¿Cuánto vale',
+    heroLine2: 'tu artículo?',
+    heroDesc: 'Fotografía cualquier prenda o sneaker y obtén precios de reventa reales en 6 plataformas al instante.',
+    photograph: 'Fotografiar',
+    tapGallery: 'Toca para elegir foto de tu galería',
+    pricesOn6: 'Precios en 6 plataformas',
+    howItWorks: 'Cómo funciona',
+    steps: [
+      { icon: '📷', title: 'Fotografía', desc: 'Haz una foto clara del artículo' },
+      { icon: '🤖', title: 'La IA analiza', desc: 'Identifica marca, modelo y valor de mercado' },
+      { icon: '💶', title: 'Obtén precios', desc: 'Precios reales en StockX, Vinted, Depop y más' },
+    ],
+    freeAnalyses: `${MONTHLY_LIMIT} análisis gratis`,
+    freePerPeriod: 'al mes · Sin tarjeta',
+    proBadge: '✦ Análisis ilimitados · Plan Pro activo',
+    conditionLabel: 'Condición del artículo',
+    analyzeBtn: 'Analizar precio',
+    remainingPre: 'de',
+    remainingPost: 'análisis gratuitos restantes este mes.',
+    identifying: 'Identificando artículo…',
+    checkingPrices: 'Consultando precios de mercado',
+    highConfidence: 'Alta confianza',
+    conditionLabelResults: 'Condición',
+    resalePrices: 'Precios de reventa',
+    noData: 'No hay datos para esta condición.',
+    topPrice: 'Top precio',
+    priceScaleLabel: 'Escala de precio',
+    conditionImpact: 'Cómo afecta la condición al precio',
+    aiTip: 'Consejo de la IA',
+    analyzeAnother: 'Analizar otro artículo',
+    disclaimer: 'Precios estimados con IA. Pueden variar según demanda y temporada.',
+    privacy: 'Privacidad',
+    terms: 'Términos',
+    contact: 'Contacto',
+    errorDefault: 'Error al analizar. Inténtalo de nuevo.',
+    connectionError: 'Error de conexión. Inténtalo de nuevo.',
+    checkoutError: 'Error al iniciar el pago.',
+  },
+  en: {
+    newPhoto: 'New photo',
+    history: 'History',
+    subscription: 'Subscription',
+    signIn: 'Sign in',
+    paywallTitle: 'Monthly limit reached',
+    paywallDesc1: `You've used your ${MONTHLY_LIMIT} free analyses this month.`,
+    paywallDesc2: 'Come back next month or go Pro for unlimited analyses.',
+    proFeatures: ['Unlimited analyses', 'Scan history', 'Priority access to new features'],
+    addedToWaitlist: "✓ Added. We'll notify you when Pro is available.",
+    emailPlaceholder: 'your@email.com',
+    goPro: 'Go Pro — $7/mo',
+    joinWaitlist: 'Join the waitlist',
+    sending: 'Sending…',
+    waitlistError: 'Registration error. Please try again.',
+    alreadyAccount: 'Already have an account?',
+    signInManage: 'Sign in to manage your analyses',
+    back: 'Back',
+    choosePlan: 'Choose your plan',
+    noCommitment: 'No commitment. Cancel anytime.',
+    freePrice: '$0',
+    forever: 'forever',
+    analysesPerMonth: '5 analyses/month',
+    sixPlatforms: '6 platforms',
+    historyLabel: 'History',
+    noLimitsLabel: 'Unlimited',
+    proPrice: '$7',
+    perMonth: 'per month',
+    unlimited: 'Unlimited',
+    goProBtn: 'Go Pro — $7/mo',
+    signInSubscribe: 'Sign in to subscribe',
+    notNow: 'Not now',
+    myAnalyses: 'My analyses',
+    close: 'Close',
+    noAnalyses: 'No analyses yet',
+    noAnalysesDesc: 'Your upcoming scans will appear here',
+    realtimeAI: 'Real-time AI',
+    heroLine1: 'How much is',
+    heroLine2: 'your item worth?',
+    heroDesc: 'Photograph any clothing or sneaker and get real resale prices across 6 platforms instantly.',
+    photograph: 'Photograph',
+    tapGallery: 'Tap to choose a photo from your gallery',
+    pricesOn6: 'Prices on 6 platforms',
+    howItWorks: 'How it works',
+    steps: [
+      { icon: '📷', title: 'Photograph', desc: 'Take a clear photo of the item' },
+      { icon: '🤖', title: 'AI analysis', desc: 'Identifies brand, model, and market value' },
+      { icon: '💵', title: 'Get prices', desc: 'Real prices on StockX, Grailed, Depop and more' },
+    ],
+    freeAnalyses: `${MONTHLY_LIMIT} free analyses`,
+    freePerPeriod: 'per month · No card',
+    proBadge: '✦ Unlimited analyses · Pro plan active',
+    conditionLabel: 'Item condition',
+    analyzeBtn: 'Analyze price',
+    remainingPre: 'of',
+    remainingPost: 'free analyses remaining this month.',
+    identifying: 'Identifying item…',
+    checkingPrices: 'Checking market prices',
+    highConfidence: 'High confidence',
+    conditionLabelResults: 'Condition',
+    resalePrices: 'Resale prices',
+    noData: 'No data for this condition.',
+    topPrice: 'Top price',
+    priceScaleLabel: 'Price scale',
+    conditionImpact: 'How condition affects price',
+    aiTip: 'AI Tip',
+    analyzeAnother: 'Analyze another item',
+    disclaimer: 'AI-estimated prices. May vary based on demand and season.',
+    privacy: 'Privacy',
+    terms: 'Terms',
+    contact: 'Contact',
+    errorDefault: 'Error analyzing. Please try again.',
+    connectionError: 'Connection error. Please try again.',
+    checkoutError: 'Error starting payment.',
+  },
+}
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
 function CameraIcon({ size = 48 }) {
@@ -103,6 +273,7 @@ function StarIcon() {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 export default function Home() {
+  const [lang, setLang] = useState('es')
   const [stage, setStage] = useState('capture')
   const [imageData, setImageData] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
@@ -111,7 +282,7 @@ export default function Home() {
   const [error, setError] = useState(null)
   const [showPaywall, setShowPaywall] = useState(false)
   const [waitlistEmail, setWaitlistEmail] = useState('')
-  const [waitlistState, setWaitlistState] = useState('idle') // idle | loading | done | error
+  const [waitlistState, setWaitlistState] = useState('idle')
   const [history, setHistory] = useState([])
   const [showHistory, setShowHistory] = useState(false)
   const [isPro, setIsPro] = useState(false)
@@ -119,6 +290,24 @@ export default function Home() {
   const [checkoutError, setCheckoutError] = useState(null)
   const fileInputRef = useRef(null)
   const { isSignedIn, user } = useUser()
+
+  // ── Language detection ──────────────────────────────────────────────────────
+  useEffect(() => {
+    const stored = localStorage.getItem('resellsnap_lang')
+    if (stored === 'en' || stored === 'es') {
+      setLang(stored)
+    } else {
+      const detected = navigator.language?.startsWith('en') ? 'en' : 'es'
+      setLang(detected)
+      localStorage.setItem('resellsnap_lang', detected)
+    }
+  }, [])
+
+  // ── Derived from lang ───────────────────────────────────────────────────────
+  const platforms = lang === 'en' ? PLATFORMS_EN : PLATFORMS_ES
+  const conditions = lang === 'en' ? CONDITIONS_EN : CONDITIONS_ES
+  const curr = lang === 'en' ? '$' : '€'
+  const s = STRINGS[lang]
 
   // ── Image handling ──────────────────────────────────────────────────────────
   const handleImageSelect = useCallback((e) => {
@@ -129,7 +318,6 @@ export default function Home() {
     reader.onload = (event) => {
       const img = new Image()
       img.onload = () => {
-        // Compress: max 1024px, JPEG 80%
         const canvas = document.createElement('canvas')
         const MAX = 1024
         let { width, height } = img
@@ -160,11 +348,11 @@ export default function Home() {
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: imageData, condition }),
+        body: JSON.stringify({ image: imageData, condition, lang }),
       })
       if (!res.ok) {
         const err = await res.json().catch(() => ({}))
-        throw new Error(err.error || 'Error al analizar. Inténtalo de nuevo.')
+        throw new Error(err.error || s.errorDefault)
       }
       const data = await res.json()
       incrementUsage()
@@ -176,9 +364,9 @@ export default function Home() {
       setError(err.message)
       setStage('preview')
     }
-  }, [imageData, condition])
+  }, [imageData, condition, lang, s])
 
-  // ── Cargar estado Pro ────────────────────────────────────────────────────────
+  // ── Pro status ───────────────────────────────────────────────────────────────
   const loadProStatus = useCallback(async () => {
     if (!user?.id) return
     const res = await fetch(`/api/profile?userId=${user.id}`)
@@ -186,7 +374,6 @@ export default function Home() {
     setIsPro(data?.is_pro ?? false)
   }, [user])
 
-  // Detectar vuelta de Stripe con ?pro=success → guardar flag en localStorage
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     if (params.get('pro') === 'success') {
@@ -195,7 +382,6 @@ export default function Home() {
     }
   }, [])
 
-  // Cuando el usuario está logueado, sincronizar Pro si hay flag pendiente
   useEffect(() => {
     if (!isSignedIn || !user?.id) return
     loadProStatus()
@@ -214,7 +400,7 @@ export default function Home() {
     }
   }, [isSignedIn, user, loadProStatus])
 
-  // ── Checkout Stripe ──────────────────────────────────────────────────────────
+  // ── Checkout / Portal ────────────────────────────────────────────────────────
   const handlePortal = useCallback(async () => {
     if (!user?.id) return
     const res = await fetch('/api/portal', {
@@ -239,14 +425,14 @@ export default function Home() {
       if (data.url) {
         window.location.href = data.url
       } else {
-        setCheckoutError(data.error || 'Error al iniciar el pago.')
+        setCheckoutError(data.error || s.checkoutError)
       }
     } catch {
-      setCheckoutError('Error de conexión. Inténtalo de nuevo.')
+      setCheckoutError(s.connectionError)
     }
-  }, [isSignedIn, user])
+  }, [isSignedIn, user, s])
 
-  // ── Supabase: guardar scan ───────────────────────────────────────────────────
+  // ── Supabase ─────────────────────────────────────────────────────────────────
   const saveScan = useCallback(async (data, cond) => {
     if (!user?.id) return
     await supabase.from('scans').insert({
@@ -262,7 +448,6 @@ export default function Home() {
     })
   }, [user])
 
-  // ── Supabase: cargar historial ───────────────────────────────────────────────
   const loadHistory = useCallback(async () => {
     if (!user?.id) return
     const { data } = await supabase
@@ -306,7 +491,7 @@ export default function Home() {
   // ── Helpers ─────────────────────────────────────────────────────────────────
   const getPricesForCondition = useCallback(() => {
     if (!results?.platforms) return []
-    return PLATFORMS
+    return platforms
       .map((p) => {
         const prices = results.platforms[p.id]?.[condition]
         if (!prices || !prices.min || !prices.max) return null
@@ -314,15 +499,15 @@ export default function Home() {
       })
       .filter(Boolean)
       .sort((a, b) => b.max - a.max)
-  }, [results, condition])
+  }, [results, condition, platforms])
 
   const getScaleForPlatform = useCallback((platform) => {
     if (!results?.platforms?.[platform]) return []
-    return CONDITIONS.map((c) => {
+    return conditions.map((c) => {
       const prices = results.platforms[platform][c.id]
       return prices ? { ...c, mid: Math.round((prices.min + prices.max) / 2) } : null
     }).filter(Boolean)
-  }, [results])
+  }, [results, conditions])
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
@@ -348,7 +533,7 @@ export default function Home() {
               className="flex items-center gap-1.5 text-sm text-slate-300 hover:text-white transition-colors cursor-pointer py-1 px-2 rounded-lg hover:bg-white/10"
             >
               <RefreshIcon />
-              <span>Nueva foto</span>
+              <span>{s.newPhoto}</span>
             </button>
           )}
           {isSignedIn && (
@@ -356,7 +541,7 @@ export default function Home() {
               onClick={() => { loadHistory(); setShowHistory(true) }}
               className="text-xs font-semibold text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition-all cursor-pointer"
             >
-              Historial
+              {s.history}
             </button>
           )}
           {isPro && (
@@ -364,7 +549,7 @@ export default function Home() {
               onClick={handlePortal}
               className="text-xs font-semibold text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition-all cursor-pointer"
             >
-              Suscripción
+              {s.subscription}
             </button>
           )}
           {!isPro && (
@@ -381,7 +566,7 @@ export default function Home() {
           ) : (
             <SignInButton mode="modal">
               <button className="text-xs font-semibold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-white/20 hover:bg-white/10 transition-all cursor-pointer">
-                Iniciar sesión
+                {s.signIn}
               </button>
             </SignInButton>
           )}
@@ -395,17 +580,17 @@ export default function Home() {
             <div className="w-12 h-1.5 bg-brand-muted rounded-full mx-auto" />
             <div className="text-center space-y-1">
               <p className="text-2xl">🔒</p>
-              <h2 className="text-xl font-bold text-brand-fg">Límite mensual alcanzado</h2>
+              <h2 className="text-xl font-bold text-brand-fg">{s.paywallTitle}</h2>
               <p className="text-sm text-brand-subtle leading-relaxed">
-                Has usado tus {MONTHLY_LIMIT} análisis gratuitos del mes.<br />
-                Vuelve el próximo mes o hazte Pro para análisis ilimitados.
+                {s.paywallDesc1}<br />
+                {s.paywallDesc2}
               </p>
             </div>
 
             <div className="bg-brand-fg rounded-2xl p-4 flex flex-col gap-3">
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">ResellSnap Pro</p>
               <ul className="text-sm text-slate-200 space-y-1.5">
-                {['Análisis ilimitados', 'Historial de escaneos', 'Acceso prioritario a nuevas funciones'].map((f) => (
+                {s.proFeatures.map((f) => (
                   <li key={f} className="flex items-center gap-2">
                     <span className="text-green-400">✓</span> {f}
                   </li>
@@ -414,13 +599,13 @@ export default function Home() {
 
               {waitlistState === 'done' ? (
                 <div className="bg-green-500/20 rounded-xl p-3 text-center text-sm text-green-300 font-medium">
-                  ✓ Apuntado. Te avisaremos cuando Pro esté disponible.
+                  {s.addedToWaitlist}
                 </div>
               ) : (
                 <form onSubmit={handleWaitlist} className="flex flex-col gap-2 mt-1">
                   <input
                     type="email"
-                    placeholder="tu@email.com"
+                    placeholder={s.emailPlaceholder}
                     value={waitlistEmail}
                     onChange={(e) => setWaitlistEmail(e.target.value)}
                     required
@@ -432,7 +617,7 @@ export default function Home() {
                       onClick={handleCheckout}
                       className="w-full py-3 bg-brand-accent text-white rounded-xl font-semibold text-sm cursor-pointer active:scale-[0.98] transition-transform"
                     >
-                      Hazte Pro — 7€/mes
+                      {s.goPro}
                     </button>
                   ) : (
                     <button
@@ -440,11 +625,11 @@ export default function Home() {
                       disabled={waitlistState === 'loading'}
                       className="w-full py-3 bg-brand-accent text-white rounded-xl font-semibold text-sm cursor-pointer active:scale-[0.98] transition-transform disabled:opacity-60"
                     >
-                      {waitlistState === 'loading' ? 'Enviando…' : 'Únete a la lista de espera'}
+                      {waitlistState === 'loading' ? s.sending : s.joinWaitlist}
                     </button>
                   )}
                   {waitlistState === 'error' && (
-                    <p className="text-xs text-red-400 text-center">Error al registrar. Inténtalo de nuevo.</p>
+                    <p className="text-xs text-red-400 text-center">{s.waitlistError}</p>
                   )}
                 </form>
               )}
@@ -452,10 +637,10 @@ export default function Home() {
 
             {!isSignedIn && (
               <div className="text-center">
-                <p className="text-xs text-brand-subtle mb-2">¿Ya tienes cuenta?</p>
+                <p className="text-xs text-brand-subtle mb-2">{s.alreadyAccount}</p>
                 <SignInButton mode="modal">
                   <button className="text-sm font-semibold text-brand-accent cursor-pointer hover:underline">
-                    Inicia sesión para gestionar tus análisis
+                    {s.signInManage}
                   </button>
                 </SignInButton>
               </div>
@@ -465,7 +650,7 @@ export default function Home() {
               onClick={() => setShowPaywall(false)}
               className="text-sm text-brand-subtle text-center py-1 cursor-pointer hover:text-brand-fg transition-colors"
             >
-              Volver
+              {s.back}
             </button>
           </div>
         </div>
@@ -478,23 +663,22 @@ export default function Home() {
             <div className="w-12 h-1.5 bg-brand-muted rounded-full mx-auto" />
 
             <div className="text-center">
-              <h2 className="text-xl font-extrabold text-brand-fg">Elige tu plan</h2>
-              <p className="text-sm text-brand-subtle mt-1">Sin permanencia. Cancela cuando quieras.</p>
+              <h2 className="text-xl font-extrabold text-brand-fg">{s.choosePlan}</h2>
+              <p className="text-sm text-brand-subtle mt-1">{s.noCommitment}</p>
             </div>
 
-            {/* Plan cards */}
             <div className="grid grid-cols-2 gap-3">
               {/* Free */}
               <div className="rounded-2xl border-2 border-brand-border p-4 flex flex-col gap-2">
                 <p className="text-xs font-bold text-brand-subtle uppercase tracking-wider">Free</p>
-                <p className="text-2xl font-extrabold text-brand-fg">0€</p>
-                <p className="text-[11px] text-brand-subtle">para siempre</p>
+                <p className="text-2xl font-extrabold text-brand-fg">{s.freePrice}</p>
+                <p className="text-[11px] text-brand-subtle">{s.forever}</p>
                 <div className="border-t border-brand-border my-1" />
                 <ul className="text-xs text-brand-secondary space-y-1.5">
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> 5 análisis/mes</li>
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> 6 plataformas</li>
-                  <li className="flex items-center gap-1.5"><span className="text-slate-300">✗</span> Historial</li>
-                  <li className="flex items-center gap-1.5"><span className="text-slate-300">✗</span> Sin límites</li>
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.analysesPerMonth}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.sixPlatforms}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-slate-300">✗</span> {s.historyLabel}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-slate-300">✗</span> {s.noLimitsLabel}</li>
                 </ul>
               </div>
 
@@ -502,14 +686,14 @@ export default function Home() {
               <div className="rounded-2xl border-2 p-4 flex flex-col gap-2 relative overflow-hidden" style={{ borderColor: '#2563EB', background: 'linear-gradient(145deg, #EFF6FF, #F5F3FF)' }}>
                 <div className="absolute top-2.5 right-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}>✦ PRO</div>
                 <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#2563EB' }}>Pro</p>
-                <p className="text-2xl font-extrabold text-brand-fg">7€</p>
-                <p className="text-[11px] text-brand-subtle">al mes</p>
+                <p className="text-2xl font-extrabold text-brand-fg">{s.proPrice}</p>
+                <p className="text-[11px] text-brand-subtle">{s.perMonth}</p>
                 <div className="border-t border-blue-100 my-1" />
                 <ul className="text-xs text-brand-secondary space-y-1.5">
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> Ilimitados</li>
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> 6 plataformas</li>
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> Historial</li>
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> Sin límites</li>
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.unlimited}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.sixPlatforms}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.historyLabel}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.noLimitsLabel}</li>
                 </ul>
               </div>
             </div>
@@ -521,14 +705,14 @@ export default function Home() {
                   className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform"
                   style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', boxShadow: '0 8px 24px -6px rgba(37,99,235,0.5)' }}
                 >
-                  Hazte Pro — 7€/mes
+                  {s.goProBtn}
                 </button>
                 {checkoutError && <p className="text-xs text-red-500 text-center -mt-2">{checkoutError}</p>}
               </>
             ) : (
               <SignInButton mode="modal">
                 <button className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}>
-                  Inicia sesión para suscribirte
+                  {s.signInSubscribe}
                 </button>
               </SignInButton>
             )}
@@ -537,7 +721,7 @@ export default function Home() {
               onClick={() => setShowPricing(false)}
               className="text-sm text-brand-subtle text-center py-1 cursor-pointer hover:text-brand-fg transition-colors"
             >
-              Ahora no
+              {s.notNow}
             </button>
           </div>
         </div>
@@ -547,22 +731,22 @@ export default function Home() {
       {showHistory && (
         <div className="fixed inset-0 z-50 flex flex-col bg-brand-bg max-w-md mx-auto">
           <div className="flex items-center justify-between px-4 h-14 border-b border-brand-border bg-white flex-shrink-0">
-            <h2 className="font-bold text-brand-fg text-base">Mis análisis</h2>
+            <h2 className="font-bold text-brand-fg text-base">{s.myAnalyses}</h2>
             <button onClick={() => setShowHistory(false)} className="text-sm text-brand-subtle hover:text-brand-fg cursor-pointer px-2 py-1">
-              Cerrar
+              {s.close}
             </button>
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {history.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full gap-3 text-center py-20">
                 <p className="text-4xl">📷</p>
-                <p className="font-semibold text-brand-fg">Sin análisis todavía</p>
-                <p className="text-sm text-brand-subtle">Tus próximos scans aparecerán aquí</p>
+                <p className="font-semibold text-brand-fg">{s.noAnalyses}</p>
+                <p className="text-sm text-brand-subtle">{s.noAnalysesDesc}</p>
               </div>
             ) : history.map((scan) => {
               const condPrices = scan.platforms?.[scan.best_platform]?.[scan.condition]
               const mid = condPrices ? Math.round((condPrices.min + condPrices.max) / 2) : null
-              const platform = PLATFORMS.find(p => p.id === scan.best_platform)
+              const platform = platforms.find(p => p.id === scan.best_platform)
               return (
                 <div key={scan.id} className="bg-white rounded-2xl border border-brand-border p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-bold text-white"
@@ -571,11 +755,11 @@ export default function Home() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-sm text-brand-fg truncate">{scan.item_name}</p>
-                    <p className="text-xs text-brand-subtle">{scan.category} · {CONDITIONS.find(c => c.id === scan.condition)?.label}</p>
+                    <p className="text-xs text-brand-subtle">{scan.category} · {conditions.find(c => c.id === scan.condition)?.label ?? scan.condition}</p>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    {mid ? <p className="font-bold text-sm text-brand-fg">~€{mid}</p> : null}
-                    <p className="text-[10px] text-brand-subtle">{new Date(scan.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</p>
+                    {mid ? <p className="font-bold text-sm text-brand-fg">~{curr}{mid}</p> : null}
+                    <p className="text-[10px] text-brand-subtle">{new Date(scan.created_at).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'short' })}</p>
                   </div>
                 </div>
               )
@@ -597,14 +781,14 @@ export default function Home() {
             <div className="text-center space-y-3 animate-fade-up">
               <div className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 rounded-full px-3 py-1 mb-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-xs font-semibold text-blue-700">IA en tiempo real</span>
+                <span className="text-xs font-semibold text-blue-700">{s.realtimeAI}</span>
               </div>
               <h1 className="text-[28px] font-extrabold text-brand-fg leading-tight tracking-tight">
-                ¿Cuánto vale<br />
-                <span className="gradient-text">tu artículo?</span>
+                {s.heroLine1}<br />
+                <span className="gradient-text">{s.heroLine2}</span>
               </h1>
               <p className="text-brand-subtle text-sm leading-relaxed max-w-xs mx-auto">
-                Fotografía cualquier prenda o sneaker y obtén precios de reventa reales en 6 plataformas al instante.
+                {s.heroDesc}
               </p>
             </div>
 
@@ -614,14 +798,14 @@ export default function Home() {
                 onClick={() => fileInputRef.current?.click()}
                 className="relative w-40 h-40 rounded-full flex flex-col items-center justify-center gap-3 active:scale-95 transition-all duration-150 cursor-pointer"
                 style={{ background: 'linear-gradient(135deg, #1E293B 0%, #2563EB 100%)', boxShadow: '0 20px 60px -10px rgba(37,99,235,0.5)' }}
-                aria-label="Hacer foto o elegir imagen"
+                aria-label={s.photograph}
               >
                 <span className="btn-camera-ring" />
                 <span className="btn-camera-ring-2" />
                 <CameraIcon size={44} />
-                <span className="text-sm font-bold tracking-wide text-white">Fotografiar</span>
+                <span className="text-sm font-bold tracking-wide text-white">{s.photograph}</span>
               </button>
-              <p className="text-xs text-brand-subtle">Toca para elegir foto de tu galería</p>
+              <p className="text-xs text-brand-subtle">{s.tapGallery}</p>
             </div>
 
             <input
@@ -630,14 +814,14 @@ export default function Home() {
               accept="image/*"
               onChange={handleImageSelect}
               className="sr-only"
-              aria-label="Seleccionar imagen"
+              aria-label={s.photograph}
             />
 
             {/* Platform grid */}
             <div className="flex flex-col items-center gap-3">
-              <p className="text-[11px] text-brand-subtle font-semibold uppercase tracking-widest">Precios en 6 plataformas</p>
+              <p className="text-[11px] text-brand-subtle font-semibold uppercase tracking-widest">{s.pricesOn6}</p>
               <div className="flex flex-wrap justify-center gap-2">
-                {PLATFORMS.map((p) => (
+                {platforms.map((p) => (
                   <span
                     key={p.id}
                     className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white border border-brand-border text-brand-secondary shadow-sm"
@@ -651,13 +835,9 @@ export default function Home() {
 
             {/* How it works */}
             <div className="bg-white rounded-3xl border border-brand-border p-5 space-y-4">
-              <p className="text-xs font-bold text-brand-subtle uppercase tracking-widest">Cómo funciona</p>
-              {[
-                { step: '1', icon: '📷', title: 'Fotografía', desc: 'Haz una foto clara del artículo' },
-                { step: '2', icon: '🤖', title: 'La IA analiza', desc: 'Identifica marca, modelo y valor de mercado' },
-                { step: '3', icon: '💶', title: 'Obtén precios', desc: 'Precios reales en StockX, Vinted, Depop y más' },
-              ].map(({ step, icon, title, desc }) => (
-                <div key={step} className="flex items-start gap-3">
+              <p className="text-xs font-bold text-brand-subtle uppercase tracking-widest">{s.howItWorks}</p>
+              {s.steps.map(({ step, icon, title, desc }, i) => (
+                <div key={i} className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-xl bg-brand-fg flex items-center justify-center flex-shrink-0 text-sm">{icon}</div>
                   <div>
                     <p className="text-sm font-semibold text-brand-fg">{title}</p>
@@ -670,8 +850,8 @@ export default function Home() {
             {/* Free uses badge */}
             <p className="text-center text-xs text-brand-subtle">
               {isPro
-                ? <span className="font-semibold" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>✦ Análisis ilimitados · Plan Pro activo</span>
-                : <><span className="font-semibold text-brand-fg">{MONTHLY_LIMIT} análisis gratis</span> al mes · Sin tarjeta</>
+                ? <span className="font-semibold" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{s.proBadge}</span>
+                : <><span className="font-semibold text-brand-fg">{s.freeAnalyses}</span> {s.freePerPeriod}</>
               }
             </p>
           </div>
@@ -682,17 +862,15 @@ export default function Home() {
         ════════════════════════════════════════════════════════════ */}
         {stage === 'preview' && imagePreview && (
           <div className="flex-1 flex flex-col">
-            {/* Image preview */}
             <div className="relative bg-black">
               <img
                 src={imagePreview}
-                alt="Vista previa"
+                alt="Preview"
                 className="w-full aspect-square object-cover opacity-95"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
             </div>
 
-            {/* Form */}
             <div className="flex-1 p-4 flex flex-col gap-5 overflow-y-auto">
               {error && (
                 <div role="alert" className="bg-red-50 border border-red-200 rounded-2xl p-3.5 text-sm text-red-700 font-medium">
@@ -700,13 +878,12 @@ export default function Home() {
                 </div>
               )}
 
-              {/* Condition picker */}
               <div>
                 <p className="text-xs font-semibold text-brand-subtle uppercase tracking-wider mb-3">
-                  Condición del artículo
+                  {s.conditionLabel}
                 </p>
                 <div className="grid grid-cols-2 gap-2">
-                  {CONDITIONS.map((c) => (
+                  {conditions.map((c) => (
                     <button
                       key={c.id}
                       onClick={() => setCondition(c.id)}
@@ -725,18 +902,16 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Analyze CTA */}
               <button
                 onClick={handleAnalyze}
                 className="w-full py-4 bg-brand-accent text-white rounded-2xl font-semibold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-md shadow-blue-600/25 cursor-pointer"
               >
-                <span>Analizar precio</span>
+                <span>{s.analyzeBtn}</span>
                 <ArrowIcon />
               </button>
 
-              {/* Usage indicator */}
               <p className="text-center text-[11px] text-brand-subtle leading-relaxed">
-                {getRemainingUses()} de {MONTHLY_LIMIT} análisis gratuitos restantes este mes.
+                {getRemainingUses()} {s.remainingPre} {MONTHLY_LIMIT} {s.remainingPost}
               </p>
             </div>
           </div>
@@ -750,12 +925,10 @@ export default function Home() {
             <div className="relative scan-container bg-black">
               <img
                 src={imagePreview}
-                alt="Analizando"
+                alt="Analyzing"
                 className="w-full aspect-square object-cover opacity-40"
               />
-              {/* Scan overlay */}
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                {/* Viewfinder corners */}
                 <div className="relative w-48 h-48">
                   <span className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-blue-400 rounded-tl-sm" />
                   <span className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-blue-400 rounded-tr-sm" />
@@ -763,15 +936,13 @@ export default function Home() {
                   <span className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-blue-400 rounded-br-sm" />
                   <div className="scan-line" />
                 </div>
-                {/* Text */}
                 <div className="mt-8 text-center">
-                  <p className="text-white font-semibold text-lg">Identificando artículo…</p>
-                  <p className="text-white/60 text-sm mt-1">Consultando precios de mercado</p>
+                  <p className="text-white font-semibold text-lg">{s.identifying}</p>
+                  <p className="text-white/60 text-sm mt-1">{s.checkingPrices}</p>
                 </div>
               </div>
             </div>
 
-            {/* Skeleton placeholders */}
             <div className="p-4 space-y-3">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="bg-white rounded-2xl p-4 border border-brand-border flex items-center gap-3">
@@ -794,7 +965,7 @@ export default function Home() {
           const prices = getPricesForCondition()
           const bestPlatform = results.best_platform || prices[0]?.id
           const scaleData = getScaleForPlatform(bestPlatform)
-          const maxMid = Math.max(...(scaleData.map((s) => s.mid) || [1]))
+          const maxMid = Math.max(...(scaleData.map((sc) => sc.mid) || [1]))
           const maxMax = prices.length > 0 ? Math.max(...prices.map((p) => p.max)) : 1
 
           return (
@@ -805,7 +976,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-fg via-brand-fg/30 to-transparent pointer-events-none" />
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <p className="text-white/60 text-xs font-semibold uppercase tracking-widest mb-1">
-                    {results.category || 'Artículo'}
+                    {results.category || 'Item'}
                   </p>
                   <h2 className="text-white font-bold text-xl leading-snug">
                     {results.item_name}
@@ -813,7 +984,7 @@ export default function Home() {
                   {results.confidence === 'high' && (
                     <div className="flex items-center gap-1 mt-1.5">
                       <StarIcon />
-                      <span className="text-yellow-300 text-xs font-medium">Alta confianza</span>
+                      <span className="text-yellow-300 text-xs font-medium">{s.highConfidence}</span>
                     </div>
                   )}
                 </div>
@@ -823,9 +994,9 @@ export default function Home() {
 
                 {/* ── Condition selector ─────────────────────────────────── */}
                 <div>
-                  <p className="text-xs font-semibold text-brand-subtle uppercase tracking-wider mb-2">Condición</p>
+                  <p className="text-xs font-semibold text-brand-subtle uppercase tracking-wider mb-2">{s.conditionLabelResults}</p>
                   <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
-                    {CONDITIONS.map((c) => (
+                    {conditions.map((c) => (
                       <button
                         key={c.id}
                         onClick={() => setCondition(c.id)}
@@ -843,10 +1014,10 @@ export default function Home() {
 
                 {/* ── Platform price cards ───────────────────────────────── */}
                 <div>
-                  <p className="text-xs font-semibold text-brand-subtle uppercase tracking-wider mb-2">Precios de reventa</p>
+                  <p className="text-xs font-semibold text-brand-subtle uppercase tracking-wider mb-2">{s.resalePrices}</p>
                   <div className="flex flex-col gap-2">
                     {prices.length === 0 ? (
-                      <p className="text-sm text-brand-subtle text-center py-4">No hay datos para esta condición.</p>
+                      <p className="text-sm text-brand-subtle text-center py-4">{s.noData}</p>
                     ) : prices.map((p, i) => (
                       <div
                         key={p.id}
@@ -855,7 +1026,6 @@ export default function Home() {
                         }`}
                         style={{ animationDelay: `${i * 60}ms` }}
                       >
-                        {/* Platform badge */}
                         <div
                           className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-bold text-white shadow-sm"
                           style={{ backgroundColor: p.color }}
@@ -864,7 +1034,6 @@ export default function Home() {
                           {p.abbr}
                         </div>
 
-                        {/* Info */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-2 mb-1">
                             <span className="font-semibold text-sm text-brand-fg truncate">{p.name}</span>
@@ -879,7 +1048,7 @@ export default function Home() {
                               )}
                               {i === 0 && (
                                 <span className="text-[10px] bg-blue-50 text-brand-accent font-semibold px-1.5 py-0.5 rounded-md">
-                                  Top precio
+                                  {s.topPrice}
                                 </span>
                               )}
                             </div>
@@ -887,14 +1056,13 @@ export default function Home() {
 
                           <div className="flex items-center justify-between">
                             <span className="text-brand-fg font-bold text-base">
-                              €{p.min} – €{p.max}
+                              {curr}{p.min} – {curr}{p.max}
                             </span>
                             <span className="text-brand-subtle text-xs">
-                              ~€{p.mid}
+                              ~{curr}{p.mid}
                             </span>
                           </div>
 
-                          {/* Price bar */}
                           <div className="mt-2 h-1.5 bg-brand-muted rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full transition-all duration-700 ease-out"
@@ -912,36 +1080,36 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* ── Pricing scale (condition impact) ──────────────────── */}
+                {/* ── Pricing scale ──────────────────────────────────────── */}
                 {scaleData.length > 1 && (() => {
-                  const bestP = PLATFORMS.find((p) => p.id === bestPlatform)
+                  const bestP = platforms.find((p) => p.id === bestPlatform)
                   return (
                     <div className="bg-white rounded-2xl p-4 border border-brand-border">
                       <p className="text-xs font-semibold text-brand-subtle uppercase tracking-wider mb-1">
-                        Escala de precio — {bestP?.name || 'Mejor plataforma'}
+                        {s.priceScaleLabel} — {bestP?.name || bestPlatform}
                       </p>
-                      <p className="text-xs text-brand-subtle mb-3">Cómo afecta la condición al precio</p>
+                      <p className="text-xs text-brand-subtle mb-3">{s.conditionImpact}</p>
                       <div className="space-y-2.5">
-                        {scaleData.map((s) => (
-                          <div key={s.id} className="flex items-center gap-3">
+                        {scaleData.map((sc) => (
+                          <div key={sc.id} className="flex items-center gap-3">
                             <span className={`text-xs font-medium w-24 flex-shrink-0 ${
-                              s.id === condition ? 'text-brand-accent font-semibold' : 'text-brand-secondary'
+                              sc.id === condition ? 'text-brand-accent font-semibold' : 'text-brand-secondary'
                             }`}>
-                              {s.label}
+                              {sc.label}
                             </span>
                             <div className="flex-1 h-2 bg-brand-muted rounded-full overflow-hidden">
                               <div
                                 className="h-full rounded-full transition-all duration-700"
                                 style={{
-                                  width: `${Math.max(5, (s.mid / maxMid) * 100)}%`,
-                                  backgroundColor: s.id === condition ? '#2563EB' : '#CBD5E1',
+                                  width: `${Math.max(5, (sc.mid / maxMid) * 100)}%`,
+                                  backgroundColor: sc.id === condition ? '#2563EB' : '#CBD5E1',
                                 }}
                               />
                             </div>
                             <span className={`text-sm font-bold w-14 text-right flex-shrink-0 ${
-                              s.id === condition ? 'text-brand-accent' : 'text-brand-secondary'
+                              sc.id === condition ? 'text-brand-accent' : 'text-brand-secondary'
                             }`}>
-                              ~€{s.mid}
+                              ~{curr}{sc.mid}
                             </span>
                           </div>
                         ))}
@@ -954,7 +1122,7 @@ export default function Home() {
                 {results.tip && (
                   <div className="bg-brand-fg rounded-2xl p-4">
                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
-                      Consejo de la IA
+                      {s.aiTip}
                     </p>
                     <p className="text-sm text-slate-200 leading-relaxed">{results.tip}</p>
                   </div>
@@ -966,11 +1134,11 @@ export default function Home() {
                   className="w-full py-4 bg-brand-primary text-white rounded-2xl font-semibold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform cursor-pointer"
                 >
                   <RefreshIcon />
-                  <span>Analizar otro artículo</span>
+                  <span>{s.analyzeAnother}</span>
                 </button>
 
                 <p className="text-center text-[11px] text-brand-subtle leading-relaxed">
-                  Precios estimados con IA. Pueden variar según demanda y temporada.
+                  {s.disclaimer}
                 </p>
               </div>
             </div>
@@ -978,11 +1146,12 @@ export default function Home() {
         })()}
 
       </main>
+
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
       <footer className="flex-shrink-0 py-4 px-5 flex justify-center gap-5 border-t border-brand-border">
-        <a href="/privacidad" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">Privacidad</a>
-        <a href="/terminos" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">Términos</a>
-        <a href="mailto:soporte@resellsnap.es" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">Contacto</a>
+        <a href="/privacidad" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">{s.privacy}</a>
+        <a href="/terminos" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">{s.terms}</a>
+        <a href="mailto:soporte@resellsnap.es" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">{s.contact}</a>
       </footer>
 
     </div>
