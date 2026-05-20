@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase'
 import Onboarding from './components/Onboarding'
 
 // ─── Usage limit ──────────────────────────────────────────────────────────────
-const DAILY_LIMIT = 5
+const MONTHLY_LIMIT = 5
 const STORAGE_KEY = 'resellsnap_usage'
 
 function getUsage() {
@@ -18,18 +18,18 @@ function getUsage() {
 }
 
 function incrementUsage() {
-  const today = new Date().toISOString().slice(0, 10)
+  const month = new Date().toISOString().slice(0, 7)
   const usage = getUsage()
-  const count = usage.date === today ? usage.count + 1 : 1
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ count, date: today }))
+  const count = usage.date === month ? usage.count + 1 : 1
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ count, date: month }))
   return count
 }
 
 function getRemainingUses() {
-  const today = new Date().toISOString().slice(0, 10)
+  const month = new Date().toISOString().slice(0, 7)
   const usage = getUsage()
-  if (usage.date !== today) return DAILY_LIMIT
-  return Math.max(0, DAILY_LIMIT - usage.count)
+  if (usage.date !== month) return MONTHLY_LIMIT
+  return Math.max(0, MONTHLY_LIMIT - usage.count)
 }
 
 // ─── Platform config ─────────────────────────────────────────────────────────
@@ -395,10 +395,10 @@ export default function Home() {
             <div className="w-12 h-1.5 bg-brand-muted rounded-full mx-auto" />
             <div className="text-center space-y-1">
               <p className="text-2xl">🔒</p>
-              <h2 className="text-xl font-bold text-brand-fg">Límite diario alcanzado</h2>
+              <h2 className="text-xl font-bold text-brand-fg">Límite mensual alcanzado</h2>
               <p className="text-sm text-brand-subtle leading-relaxed">
-                Has usado tus {DAILY_LIMIT} análisis gratuitos de hoy.<br />
-                Vuelve mañana o hazte Pro para análisis ilimitados.
+                Has usado tus {MONTHLY_LIMIT} análisis gratuitos del mes.<br />
+                Vuelve el próximo mes o hazte Pro para análisis ilimitados.
               </p>
             </div>
 
@@ -491,7 +491,7 @@ export default function Home() {
                 <p className="text-[11px] text-brand-subtle">para siempre</p>
                 <div className="border-t border-brand-border my-1" />
                 <ul className="text-xs text-brand-secondary space-y-1.5">
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> 5 análisis/día</li>
+                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> 5 análisis/mes</li>
                   <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> 6 plataformas</li>
                   <li className="flex items-center gap-1.5"><span className="text-slate-300">✗</span> Historial</li>
                   <li className="flex items-center gap-1.5"><span className="text-slate-300">✗</span> Sin límites</li>
@@ -671,7 +671,7 @@ export default function Home() {
             <p className="text-center text-xs text-brand-subtle">
               {isPro
                 ? <span className="font-semibold" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>✦ Análisis ilimitados · Plan Pro activo</span>
-                : <><span className="font-semibold text-brand-fg">{DAILY_LIMIT} análisis gratis</span> al día · Sin tarjeta</>
+                : <><span className="font-semibold text-brand-fg">{MONTHLY_LIMIT} análisis gratis</span> al mes · Sin tarjeta</>
               }
             </p>
           </div>
@@ -736,7 +736,7 @@ export default function Home() {
 
               {/* Usage indicator */}
               <p className="text-center text-[11px] text-brand-subtle leading-relaxed">
-                {getRemainingUses()} de {DAILY_LIMIT} análisis gratuitos restantes hoy.
+                {getRemainingUses()} de {MONTHLY_LIMIT} análisis gratuitos restantes este mes.
               </p>
             </div>
           </div>

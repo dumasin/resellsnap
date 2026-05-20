@@ -23,7 +23,7 @@ export default function Terminos() {
         <div>
           <h2 className="font-bold text-slate-900 text-base mb-2">3. Plan gratuito y plan Pro</h2>
           <ul className="list-disc pl-5 space-y-1">
-            <li><strong>Plan gratuito:</strong> 5 análisis diarios sin coste.</li>
+            <li><strong>Plan gratuito:</strong> 5 análisis mensuales sin coste.</li>
             <li><strong>Plan Pro:</strong> análisis ilimitados e historial por 7 € al mes. El cobro es recurrente mensual a través de Stripe.</li>
             <li>Puedes cancelar tu suscripción en cualquier momento desde el portal de cliente. El acceso Pro se mantiene hasta el final del período ya pagado.</li>
           </ul>
