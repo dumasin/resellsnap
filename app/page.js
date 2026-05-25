@@ -516,12 +516,12 @@ export default function Home() {
       <Onboarding />
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <header className="text-white px-4 h-14 flex items-center justify-between sticky top-0 z-20 flex-shrink-0" style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <header className="text-white px-4 h-14 flex items-center justify-between sticky top-0 z-20 flex-shrink-0" style={{ background: '#0F172A', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div className="flex items-center gap-2">
           <img src="/icon.png" alt="ResellSnap" className="w-8 h-8 rounded-lg flex-shrink-0" />
           <span className="font-extrabold text-lg tracking-tight">ResellSnap</span>
           {isPro && (
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', color: 'white' }}>
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#2563EB', color: 'white' }}>
               ✦ Pro
             </span>
           )}
@@ -556,7 +556,7 @@ export default function Home() {
             <button
               onClick={() => setShowPricing(true)}
               className="text-xs font-bold px-3 py-1.5 rounded-lg cursor-pointer transition-all active:scale-95"
-              style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', color: 'white' }}
+              style={{ background: '#2563EB', color: 'white' }}
             >
               ✦ Pro
             </button>
@@ -683,8 +683,8 @@ export default function Home() {
               </div>
 
               {/* Pro */}
-              <div className="rounded-2xl border-2 p-4 flex flex-col gap-2 relative overflow-hidden" style={{ borderColor: '#2563EB', background: 'linear-gradient(145deg, #EFF6FF, #F5F3FF)' }}>
-                <div className="absolute top-2.5 right-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}>✦ PRO</div>
+              <div className="rounded-2xl border-2 p-4 flex flex-col gap-2 relative overflow-hidden" style={{ borderColor: '#2563EB', background: '#F0F6FF' }}>
+                <div className="absolute top-2.5 right-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: '#2563EB' }}>✦ PRO</div>
                 <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#2563EB' }}>Pro</p>
                 <p className="text-2xl font-extrabold text-brand-fg">{s.proPrice}</p>
                 <p className="text-[11px] text-brand-subtle">{s.perMonth}</p>
@@ -703,7 +703,7 @@ export default function Home() {
                 <button
                   onClick={handleCheckout}
                   className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform"
-                  style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', boxShadow: '0 8px 24px -6px rgba(37,99,235,0.5)' }}
+                  style={{ background: '#2563EB', boxShadow: 'none' }}
                 >
                   {s.goProBtn}
                 </button>
@@ -711,7 +711,7 @@ export default function Home() {
               </>
             ) : (
               <SignInButton mode="modal">
-                <button className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)' }}>
+                <button className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform" style={{ background: '#2563EB' }}>
                   {s.signInSubscribe}
                 </button>
               </SignInButton>
@@ -797,7 +797,7 @@ export default function Home() {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 className="relative w-40 h-40 rounded-full flex flex-col items-center justify-center gap-3 active:scale-95 transition-all duration-150 cursor-pointer"
-                style={{ background: 'linear-gradient(135deg, #1E293B 0%, #2563EB 100%)', boxShadow: '0 20px 60px -10px rgba(37,99,235,0.5)' }}
+                style={{ background: '#0F172A' }}
                 aria-label={s.photograph}
               >
                 <span className="btn-camera-ring" />
@@ -850,7 +850,7 @@ export default function Home() {
             {/* Free uses badge */}
             <p className="text-center text-xs text-brand-subtle">
               {isPro
-                ? <span className="font-semibold" style={{ background: 'linear-gradient(135deg, #2563EB, #7C3AED)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{s.proBadge}</span>
+                ? <span className="font-semibold text-brand-accent">{s.proBadge}</span>
                 : <><span className="font-semibold text-brand-fg">{s.freeAnalyses}</span> {s.freePerPeriod}</>
               }
             </p>

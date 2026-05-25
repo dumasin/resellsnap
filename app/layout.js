@@ -1,9 +1,7 @@
 import { ClerkProvider } from '@clerk/nextjs'
-import { Inter } from 'next/font/google'
+import { GeistSans } from 'geist/font/sans'
 import InstallBanner from './components/InstallBanner'
 import './globals.css'
-
-const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 const APP_URL = 'https://resellsnap.es'
 
@@ -143,7 +141,7 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="es">
-        <body className={inter.className}>
+        <body className={GeistSans.className}>
           {children}
           <InstallBanner />
           <script
