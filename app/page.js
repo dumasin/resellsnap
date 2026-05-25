@@ -71,7 +71,7 @@ const STRINGS = {
     newPhoto: 'Nueva foto',
     history: 'Historial',
     subscription: 'Suscripción',
-    signIn: 'Iniciar sesión',
+    signIn: 'Entrar',
     paywallTitle: 'Límite mensual alcanzado',
     paywallDesc1: `Has usado tus ${MONTHLY_LIMIT} análisis gratuitos del mes.`,
     paywallDesc2: 'Vuelve el próximo mes o hazte Pro para análisis ilimitados.',
@@ -103,18 +103,18 @@ const STRINGS = {
     close: 'Cerrar',
     noAnalyses: 'Sin análisis todavía',
     noAnalysesDesc: 'Tus próximos scans aparecerán aquí',
-    realtimeAI: 'IA en tiempo real',
-    heroLine1: '¿Cuánto vale',
-    heroLine2: 'tu artículo?',
-    heroDesc: 'Fotografía cualquier prenda o sneaker y obtén precios de reventa reales en 6 plataformas al instante.',
-    photograph: 'Fotografiar',
-    tapGallery: 'Toca para elegir foto de tu galería',
+    heroLabel: 'Reventa inteligente',
+    heroLine1: 'Precio de reventa',
+    heroLine2: 'al instante.',
+    heroDesc: 'Fotografía cualquier sneaker o prenda y obtén precios reales en 6 plataformas.',
+    uploadTitle: 'Subir foto',
+    uploadDesc: 'Sneakers, ropa, accesorios',
     pricesOn6: 'Precios en 6 plataformas',
     howItWorks: 'Cómo funciona',
     steps: [
-      { icon: '📷', title: 'Fotografía', desc: 'Haz una foto clara del artículo' },
-      { icon: '🤖', title: 'La IA analiza', desc: 'Identifica marca, modelo y valor de mercado' },
-      { icon: '💶', title: 'Obtén precios', desc: 'Precios reales en StockX, Vinted, Depop y más' },
+      { title: 'Fotografía el artículo', desc: 'Una foto clara desde cualquier ángulo' },
+      { title: 'La IA lo identifica', desc: 'Marca, modelo y valor de mercado actual' },
+      { title: 'Obtén los precios', desc: 'Estimaciones en StockX, Vinted, Depop y más' },
     ],
     freeAnalyses: `${MONTHLY_LIMIT} análisis gratis`,
     freePerPeriod: 'al mes · Sin tarjeta',
@@ -141,6 +141,10 @@ const STRINGS = {
     errorDefault: 'Error al analizar. Inténtalo de nuevo.',
     connectionError: 'Error de conexión. Inténtalo de nuevo.',
     checkoutError: 'Error al iniciar el pago.',
+    statPlatforms: 'plataformas',
+    statAnalysis: 'análisis IA',
+    statFree: 'gratis',
+    statFreeSub: '5 al mes',
   },
   en: {
     newPhoto: 'New photo',
@@ -178,18 +182,18 @@ const STRINGS = {
     close: 'Close',
     noAnalyses: 'No analyses yet',
     noAnalysesDesc: 'Your upcoming scans will appear here',
-    realtimeAI: 'Real-time AI',
-    heroLine1: 'How much is',
-    heroLine2: 'your item worth?',
-    heroDesc: 'Photograph any clothing or sneaker and get real resale prices across 6 platforms instantly.',
-    photograph: 'Photograph',
-    tapGallery: 'Tap to choose a photo from your gallery',
+    heroLabel: 'Smart reselling',
+    heroLine1: 'Resale price',
+    heroLine2: 'in seconds.',
+    heroDesc: 'Photograph any sneaker or clothing and get real prices across 6 platforms.',
+    uploadTitle: 'Upload photo',
+    uploadDesc: 'Sneakers, clothing, accessories',
     pricesOn6: 'Prices on 6 platforms',
     howItWorks: 'How it works',
     steps: [
-      { icon: '📷', title: 'Photograph', desc: 'Take a clear photo of the item' },
-      { icon: '🤖', title: 'AI analysis', desc: 'Identifies brand, model, and market value' },
-      { icon: '💵', title: 'Get prices', desc: 'Real prices on StockX, Grailed, Depop and more' },
+      { title: 'Photograph the item', desc: 'A clear photo from any angle' },
+      { title: 'AI identifies it', desc: 'Brand, model and current market value' },
+      { title: 'Get the prices', desc: 'Estimates on StockX, Grailed, Depop and more' },
     ],
     freeAnalyses: `${MONTHLY_LIMIT} free analyses`,
     freePerPeriod: 'per month · No card',
@@ -216,57 +220,79 @@ const STRINGS = {
     errorDefault: 'Error analyzing. Please try again.',
     connectionError: 'Connection error. Please try again.',
     checkoutError: 'Error starting payment.',
+    statPlatforms: 'platforms',
+    statAnalysis: 'AI analysis',
+    statFree: 'free',
+    statFreeSub: '5 per month',
   },
 }
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
-function CameraIcon({ size = 48 }) {
+function IconCamera({ size = 24, className = '' }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
       <circle cx="12" cy="13" r="4" />
     </svg>
   )
 }
 
-function LogoIcon() {
+function IconRefresh({ size = 18 }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-      <circle cx="12" cy="13" r="3" />
-    </svg>
-  )
-}
-
-function ArrowIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-  )
-}
-
-function RefreshIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="1 4 1 10 7 10" />
       <path d="M3.51 15a9 9 0 1 0 .49-4.95" />
     </svg>
   )
 }
 
-function ChevronIcon() {
+function IconArrow({ size = 18 }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14M12 5l7 7-7 7" />
+    </svg>
+  )
+}
+
+function IconChevron({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="9 18 15 12 9 6" />
     </svg>
   )
 }
 
-function StarIcon() {
+function IconStar({ size = 11 }) {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="none">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
+  )
+}
+
+function IconPhoto({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="3" />
+      <circle cx="8.5" cy="8.5" r="1.5" />
+      <polyline points="21 15 16 10 5 21" />
+    </svg>
+  )
+}
+
+function IconSpark({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z" />
+    </svg>
+  )
+}
+
+function IconTag({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+      <line x1="7" y1="7" x2="7.01" y2="7" />
     </svg>
   )
 }
@@ -303,7 +329,6 @@ export default function Home() {
     }
   }, [])
 
-  // ── Derived from lang ───────────────────────────────────────────────────────
   const platforms = lang === 'en' ? PLATFORMS_EN : PLATFORMS_ES
   const conditions = lang === 'en' ? CONDITIONS_EN : CONDITIONS_ES
   const curr = lang === 'en' ? '$' : '€'
@@ -313,7 +338,6 @@ export default function Home() {
   const handleImageSelect = useCallback((e) => {
     const file = e.target.files?.[0]
     if (!file) return
-
     const reader = new FileReader()
     reader.onload = (event) => {
       const img = new Image()
@@ -323,13 +347,10 @@ export default function Home() {
         let { width, height } = img
         if (width > height && width > MAX) { height = Math.round((height * MAX) / width); width = MAX }
         else if (height > MAX) { width = Math.round((width * MAX) / height); height = MAX }
-        canvas.width = width
-        canvas.height = height
+        canvas.width = width; canvas.height = height
         canvas.getContext('2d').drawImage(img, 0, 0, width, height)
         const compressed = canvas.toDataURL('image/jpeg', 0.8)
-        setImageData(compressed)
-        setImagePreview(compressed)
-        setStage('preview')
+        setImageData(compressed); setImagePreview(compressed); setStage('preview')
       }
       img.src = event.target.result
     }
@@ -338,12 +359,8 @@ export default function Home() {
 
   // ── Analyze ─────────────────────────────────────────────────────────────────
   const handleAnalyze = useCallback(async () => {
-    if (!isPro && getRemainingUses() <= 0) {
-      setShowPaywall(true)
-      return
-    }
-    setStage('analyzing')
-    setError(null)
+    if (!isPro && getRemainingUses() <= 0) { setShowPaywall(true); return }
+    setStage('analyzing'); setError(null)
     try {
       const res = await fetch('/api/analyze', {
         method: 'POST',
@@ -355,14 +372,9 @@ export default function Home() {
         throw new Error(err.error || s.errorDefault)
       }
       const data = await res.json()
-      incrementUsage()
-      setResults(data)
-      setCondition(condition)
-      setStage('results')
-      saveScan(data, condition)
+      incrementUsage(); setResults(data); setCondition(condition); setStage('results'); saveScan(data, condition)
     } catch (err) {
-      setError(err.message)
-      setStage('preview')
+      setError(err.message); setStage('preview')
     }
   }, [imageData, condition, lang, s])
 
@@ -390,24 +402,16 @@ export default function Home() {
       localStorage.removeItem('resellsnap_sync_pro')
       const email = user.primaryEmailAddress?.emailAddress
       fetch('/api/sync-pro', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, email }),
-      })
-        .then(r => r.json())
-        .then(data => { if (data.is_pro) setIsPro(true) })
-        .catch(() => {})
+      }).then(r => r.json()).then(data => { if (data.is_pro) setIsPro(true) }).catch(() => {})
     }
   }, [isSignedIn, user, loadProStatus])
 
   // ── Checkout / Portal ────────────────────────────────────────────────────────
   const handlePortal = useCallback(async () => {
     if (!user?.id) return
-    const res = await fetch('/api/portal', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: user.id }),
-    })
+    const res = await fetch('/api/portal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id }) })
     const { url } = await res.json()
     if (url) window.location.href = url
   }, [user])
@@ -417,45 +421,28 @@ export default function Home() {
     setCheckoutError(null)
     try {
       const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, email: user.primaryEmailAddress?.emailAddress }),
       })
       const data = await res.json()
-      if (data.url) {
-        window.location.href = data.url
-      } else {
-        setCheckoutError(data.error || s.checkoutError)
-      }
-    } catch {
-      setCheckoutError(s.connectionError)
-    }
+      if (data.url) { window.location.href = data.url }
+      else { setCheckoutError(data.error || s.checkoutError) }
+    } catch { setCheckoutError(s.connectionError) }
   }, [isSignedIn, user, s])
 
   // ── Supabase ─────────────────────────────────────────────────────────────────
   const saveScan = useCallback(async (data, cond) => {
     if (!user?.id) return
     await supabase.from('scans').insert({
-      user_id: user.id,
-      item_name: data.item_name,
-      brand: data.brand,
-      category: data.category,
-      confidence: data.confidence,
-      condition: cond,
-      platforms: data.platforms,
-      best_platform: data.best_platform,
-      tip: data.tip,
+      user_id: user.id, item_name: data.item_name, brand: data.brand,
+      category: data.category, confidence: data.confidence, condition: cond,
+      platforms: data.platforms, best_platform: data.best_platform, tip: data.tip,
     })
   }, [user])
 
   const loadHistory = useCallback(async () => {
     if (!user?.id) return
-    const { data } = await supabase
-      .from('scans')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(30)
+    const { data } = await supabase.from('scans').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(30)
     if (data) setHistory(data)
   }, [user])
 
@@ -465,40 +452,26 @@ export default function Home() {
     if (!waitlistEmail) return
     setWaitlistState('loading')
     try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: waitlistEmail }),
-      })
+      const res = await fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: waitlistEmail }) })
       setWaitlistState(res.ok ? 'done' : 'error')
-    } catch {
-      setWaitlistState('error')
-    }
+    } catch { setWaitlistState('error') }
   }, [waitlistEmail])
 
   // ── Reset ───────────────────────────────────────────────────────────────────
   const handleReset = useCallback(() => {
-    setStage('capture')
-    setImageData(null)
-    setImagePreview(null)
-    setResults(null)
-    setError(null)
-    setShowPaywall(false)
-    setCondition('like_new')
+    setStage('capture'); setImageData(null); setImagePreview(null)
+    setResults(null); setError(null); setShowPaywall(false); setCondition('like_new')
     if (fileInputRef.current) fileInputRef.current.value = ''
   }, [])
 
   // ── Helpers ─────────────────────────────────────────────────────────────────
   const getPricesForCondition = useCallback(() => {
     if (!results?.platforms) return []
-    return platforms
-      .map((p) => {
-        const prices = results.platforms[p.id]?.[condition]
-        if (!prices || !prices.min || !prices.max) return null
-        return { ...p, min: prices.min, max: prices.max, mid: Math.round((prices.min + prices.max) / 2) }
-      })
-      .filter(Boolean)
-      .sort((a, b) => b.max - a.max)
+    return platforms.map((p) => {
+      const prices = results.platforms[p.id]?.[condition]
+      if (!prices || !prices.min || !prices.max) return null
+      return { ...p, min: prices.min, max: prices.max, mid: Math.round((prices.min + prices.max) / 2) }
+    }).filter(Boolean).sort((a, b) => b.max - a.max)
   }, [results, condition, platforms])
 
   const getScaleForPlatform = useCallback((platform) => {
@@ -511,61 +484,48 @@ export default function Home() {
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-dvh bg-brand-bg flex flex-col">
+    <div className="min-h-dvh bg-[#F8FAFC] flex flex-col">
 
       <Onboarding />
 
       {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <header className="text-white px-4 h-14 flex items-center justify-between sticky top-0 z-20 flex-shrink-0" style={{ background: '#0F172A', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-        <div className="flex items-center gap-2">
-          <img src="/icon.png" alt="ResellSnap" className="w-8 h-8 rounded-lg flex-shrink-0" />
-          <span className="font-extrabold text-lg tracking-tight">ResellSnap</span>
+      <header className="px-4 h-14 flex items-center justify-between sticky top-0 z-20 flex-shrink-0 bg-[#0F172A]">
+        <div className="flex items-center gap-2.5">
+          <img src="/icon.png" alt="ResellSnap" className="w-7 h-7 rounded-lg flex-shrink-0" />
+          <span className="font-bold text-white text-[15px] tracking-tight">ResellSnap</span>
           {isPro && (
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#2563EB', color: 'white' }}>
-              ✦ Pro
+            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/20">
+              Pro
             </span>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {stage !== 'capture' && (
-            <button
-              onClick={handleReset}
-              className="flex items-center gap-1.5 text-sm text-slate-300 hover:text-white transition-colors cursor-pointer py-1 px-2 rounded-lg hover:bg-white/10"
-            >
-              <RefreshIcon />
+            <button onClick={handleReset} className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors cursor-pointer py-1.5 px-2.5 rounded-lg hover:bg-white/8">
+              <IconRefresh size={14} />
               <span>{s.newPhoto}</span>
             </button>
           )}
           {isSignedIn && (
-            <button
-              onClick={() => { loadHistory(); setShowHistory(true) }}
-              className="text-xs font-semibold text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition-all cursor-pointer"
-            >
+            <button onClick={() => { loadHistory(); setShowHistory(true) }} className="text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-white/8 transition-all cursor-pointer">
               {s.history}
             </button>
           )}
           {isPro && (
-            <button
-              onClick={handlePortal}
-              className="text-xs font-semibold text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition-all cursor-pointer"
-            >
+            <button onClick={handlePortal} className="text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-white/8 transition-all cursor-pointer">
               {s.subscription}
             </button>
           )}
           {!isPro && (
-            <button
-              onClick={() => setShowPricing(true)}
-              className="text-xs font-bold px-3 py-1.5 rounded-lg cursor-pointer transition-all active:scale-95"
-              style={{ background: '#2563EB', color: 'white' }}
-            >
-              ✦ Pro
+            <button onClick={() => setShowPricing(true)} className="text-xs font-semibold px-3 py-1.5 rounded-lg cursor-pointer transition-all active:scale-95 bg-blue-600 text-white hover:bg-blue-500">
+              Pro
             </button>
           )}
           {isSignedIn ? (
-            <UserButton afterSignOutUrl="/" />
+            <div className="ml-1"><UserButton afterSignOutUrl="/" /></div>
           ) : (
             <SignInButton mode="modal">
-              <button className="text-xs font-semibold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-white/20 hover:bg-white/10 transition-all cursor-pointer">
+              <button className="text-xs font-medium text-slate-400 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 hover:bg-white/8 transition-all cursor-pointer ml-1">
                 {s.signIn}
               </button>
             </SignInButton>
@@ -575,191 +535,147 @@ export default function Home() {
 
       {/* ── Paywall modal ──────────────────────────────────────────────────── */}
       {showPaywall && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm">
           <div className="bg-white w-full max-w-md rounded-t-3xl p-6 flex flex-col gap-5 animate-fade-up">
-            <div className="w-12 h-1.5 bg-brand-muted rounded-full mx-auto" />
-            <div className="text-center space-y-1">
-              <p className="text-2xl">🔒</p>
-              <h2 className="text-xl font-bold text-brand-fg">{s.paywallTitle}</h2>
-              <p className="text-sm text-brand-subtle leading-relaxed">
-                {s.paywallDesc1}<br />
-                {s.paywallDesc2}
-              </p>
+            <div className="w-10 h-1 bg-slate-200 rounded-full mx-auto" />
+            <div className="text-center space-y-1.5">
+              <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </div>
+              <h2 className="text-xl font-bold text-slate-900">{s.paywallTitle}</h2>
+              <p className="text-sm text-slate-500 leading-relaxed">{s.paywallDesc1}<br />{s.paywallDesc2}</p>
             </div>
-
-            <div className="bg-brand-fg rounded-2xl p-4 flex flex-col gap-3">
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">ResellSnap Pro</p>
-              <ul className="text-sm text-slate-200 space-y-1.5">
+            <div className="bg-slate-900 rounded-2xl p-5 flex flex-col gap-3">
+              <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest">ResellSnap Pro</p>
+              <ul className="space-y-2">
                 {s.proFeatures.map((f) => (
-                  <li key={f} className="flex items-center gap-2">
-                    <span className="text-green-400">✓</span> {f}
+                  <li key={f} className="flex items-center gap-2.5 text-sm text-slate-200">
+                    <span className="w-4 h-4 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                      <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#60A5FA" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </span>
+                    {f}
                   </li>
                 ))}
               </ul>
-
               {waitlistState === 'done' ? (
-                <div className="bg-green-500/20 rounded-xl p-3 text-center text-sm text-green-300 font-medium">
-                  {s.addedToWaitlist}
-                </div>
+                <div className="bg-green-500/15 rounded-xl p-3 text-center text-sm text-green-400 font-medium">{s.addedToWaitlist}</div>
               ) : (
                 <form onSubmit={handleWaitlist} className="flex flex-col gap-2 mt-1">
-                  <input
-                    type="email"
-                    placeholder={s.emailPlaceholder}
-                    value={waitlistEmail}
-                    onChange={(e) => setWaitlistEmail(e.target.value)}
-                    required
-                    className="w-full px-3 py-2.5 rounded-xl bg-white/10 text-white placeholder-slate-400 text-sm border border-white/10 focus:outline-none focus:border-blue-400"
-                  />
+                  <input type="email" placeholder={s.emailPlaceholder} value={waitlistEmail} onChange={(e) => setWaitlistEmail(e.target.value)} required
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/8 text-white placeholder-slate-500 text-sm border border-white/10 focus:outline-none focus:border-blue-500/50" />
                   {isSignedIn ? (
-                    <button
-                      type="button"
-                      onClick={handleCheckout}
-                      className="w-full py-3 bg-brand-accent text-white rounded-xl font-semibold text-sm cursor-pointer active:scale-[0.98] transition-transform"
-                    >
+                    <button type="button" onClick={handleCheckout} className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold text-sm cursor-pointer active:scale-[0.98] transition-all">
                       {s.goPro}
                     </button>
                   ) : (
-                    <button
-                      type="submit"
-                      disabled={waitlistState === 'loading'}
-                      className="w-full py-3 bg-brand-accent text-white rounded-xl font-semibold text-sm cursor-pointer active:scale-[0.98] transition-transform disabled:opacity-60"
-                    >
+                    <button type="submit" disabled={waitlistState === 'loading'} className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold text-sm cursor-pointer active:scale-[0.98] transition-transform disabled:opacity-50">
                       {waitlistState === 'loading' ? s.sending : s.joinWaitlist}
                     </button>
                   )}
-                  {waitlistState === 'error' && (
-                    <p className="text-xs text-red-400 text-center">{s.waitlistError}</p>
-                  )}
+                  {waitlistState === 'error' && <p className="text-xs text-red-400 text-center">{s.waitlistError}</p>}
                 </form>
               )}
             </div>
-
             {!isSignedIn && (
               <div className="text-center">
-                <p className="text-xs text-brand-subtle mb-2">{s.alreadyAccount}</p>
+                <p className="text-xs text-slate-400 mb-1.5">{s.alreadyAccount}</p>
                 <SignInButton mode="modal">
-                  <button className="text-sm font-semibold text-brand-accent cursor-pointer hover:underline">
-                    {s.signInManage}
-                  </button>
+                  <button className="text-sm font-semibold text-blue-600 cursor-pointer hover:underline">{s.signInManage}</button>
                 </SignInButton>
               </div>
             )}
-
-            <button
-              onClick={() => setShowPaywall(false)}
-              className="text-sm text-brand-subtle text-center py-1 cursor-pointer hover:text-brand-fg transition-colors"
-            >
-              {s.back}
-            </button>
+            <button onClick={() => setShowPaywall(false)} className="text-sm text-slate-400 text-center py-1 cursor-pointer hover:text-slate-700 transition-colors">{s.back}</button>
           </div>
         </div>
       )}
 
       {/* ── Pricing modal ──────────────────────────────────────────────────── */}
       {showPricing && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm">
           <div className="bg-white w-full max-w-md rounded-t-3xl p-6 flex flex-col gap-5 animate-fade-up">
-            <div className="w-12 h-1.5 bg-brand-muted rounded-full mx-auto" />
-
+            <div className="w-10 h-1 bg-slate-200 rounded-full mx-auto" />
             <div className="text-center">
-              <h2 className="text-xl font-extrabold text-brand-fg">{s.choosePlan}</h2>
-              <p className="text-sm text-brand-subtle mt-1">{s.noCommitment}</p>
+              <h2 className="text-xl font-bold text-slate-900">{s.choosePlan}</h2>
+              <p className="text-sm text-slate-400 mt-1">{s.noCommitment}</p>
             </div>
-
             <div className="grid grid-cols-2 gap-3">
-              {/* Free */}
-              <div className="rounded-2xl border-2 border-brand-border p-4 flex flex-col gap-2">
-                <p className="text-xs font-bold text-brand-subtle uppercase tracking-wider">Free</p>
-                <p className="text-2xl font-extrabold text-brand-fg">{s.freePrice}</p>
-                <p className="text-[11px] text-brand-subtle">{s.forever}</p>
-                <div className="border-t border-brand-border my-1" />
-                <ul className="text-xs text-brand-secondary space-y-1.5">
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.analysesPerMonth}</li>
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.sixPlatforms}</li>
-                  <li className="flex items-center gap-1.5"><span className="text-slate-300">✗</span> {s.historyLabel}</li>
-                  <li className="flex items-center gap-1.5"><span className="text-slate-300">✗</span> {s.noLimitsLabel}</li>
+              <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4 flex flex-col gap-2">
+                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Free</p>
+                <p className="text-3xl font-black text-slate-900 tracking-tighter">{s.freePrice}</p>
+                <p className="text-[11px] text-slate-400">{s.forever}</p>
+                <div className="border-t border-slate-100 my-1" />
+                <ul className="text-xs text-slate-500 space-y-1.5">
+                  <li className="flex items-center gap-1.5"><span className="text-slate-300">—</span> {s.analysesPerMonth}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-slate-300">—</span> {s.sixPlatforms}</li>
+                  <li className="flex items-center gap-1.5 line-through opacity-40"><span>—</span> {s.historyLabel}</li>
                 </ul>
               </div>
-
-              {/* Pro */}
-              <div className="rounded-2xl border-2 p-4 flex flex-col gap-2 relative overflow-hidden" style={{ borderColor: '#2563EB', background: '#F0F6FF' }}>
-                <div className="absolute top-2.5 right-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: '#2563EB' }}>✦ PRO</div>
-                <p className="text-xs font-bold uppercase tracking-wider" style={{ color: '#2563EB' }}>Pro</p>
-                <p className="text-2xl font-extrabold text-brand-fg">{s.proPrice}</p>
-                <p className="text-[11px] text-brand-subtle">{s.perMonth}</p>
+              <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4 flex flex-col gap-2 relative overflow-hidden">
+                <div className="absolute top-3 right-3 text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white tracking-wide">PRO</div>
+                <p className="text-[10px] font-semibold text-blue-600 uppercase tracking-widest">Pro</p>
+                <p className="text-3xl font-black text-slate-900 tracking-tighter">{s.proPrice}</p>
+                <p className="text-[11px] text-slate-400">{s.perMonth}</p>
                 <div className="border-t border-blue-100 my-1" />
-                <ul className="text-xs text-brand-secondary space-y-1.5">
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.unlimited}</li>
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.sixPlatforms}</li>
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.historyLabel}</li>
-                  <li className="flex items-center gap-1.5"><span className="text-green-500">✓</span> {s.noLimitsLabel}</li>
+                <ul className="text-xs text-slate-700 space-y-1.5">
+                  <li className="flex items-center gap-1.5"><span className="text-blue-500">✓</span> {s.unlimited}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-blue-500">✓</span> {s.sixPlatforms}</li>
+                  <li className="flex items-center gap-1.5"><span className="text-blue-500">✓</span> {s.historyLabel}</li>
                 </ul>
               </div>
             </div>
-
             {isSignedIn ? (
               <>
-                <button
-                  onClick={handleCheckout}
-                  className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform"
-                  style={{ background: '#2563EB', boxShadow: 'none' }}
-                >
+                <button onClick={handleCheckout} className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-all">
                   {s.goProBtn}
                 </button>
                 {checkoutError && <p className="text-xs text-red-500 text-center -mt-2">{checkoutError}</p>}
               </>
             ) : (
               <SignInButton mode="modal">
-                <button className="w-full py-4 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform" style={{ background: '#2563EB' }}>
+                <button className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl text-base cursor-pointer active:scale-[0.98] transition-transform">
                   {s.signInSubscribe}
                 </button>
               </SignInButton>
             )}
-
-            <button
-              onClick={() => setShowPricing(false)}
-              className="text-sm text-brand-subtle text-center py-1 cursor-pointer hover:text-brand-fg transition-colors"
-            >
-              {s.notNow}
-            </button>
+            <button onClick={() => setShowPricing(false)} className="text-sm text-slate-400 text-center py-1 cursor-pointer hover:text-slate-700 transition-colors">{s.notNow}</button>
           </div>
         </div>
       )}
 
       {/* ── History modal ──────────────────────────────────────────────────── */}
       {showHistory && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-brand-bg max-w-md mx-auto">
-          <div className="flex items-center justify-between px-4 h-14 border-b border-brand-border bg-white flex-shrink-0">
-            <h2 className="font-bold text-brand-fg text-base">{s.myAnalyses}</h2>
-            <button onClick={() => setShowHistory(false)} className="text-sm text-brand-subtle hover:text-brand-fg cursor-pointer px-2 py-1">
-              {s.close}
-            </button>
+        <div className="fixed inset-0 z-50 flex flex-col bg-[#F8FAFC] max-w-md mx-auto">
+          <div className="flex items-center justify-between px-4 h-14 border-b border-slate-100 bg-white flex-shrink-0">
+            <h2 className="font-bold text-slate-900 text-base">{s.myAnalyses}</h2>
+            <button onClick={() => setShowHistory(false)} className="text-sm text-slate-400 hover:text-slate-700 cursor-pointer px-2 py-1 rounded-lg hover:bg-slate-100 transition-colors">{s.close}</button>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          <div className="flex-1 overflow-y-auto p-4 space-y-2">
             {history.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full gap-3 text-center py-20">
-                <p className="text-4xl">📷</p>
-                <p className="font-semibold text-brand-fg">{s.noAnalyses}</p>
-                <p className="text-sm text-brand-subtle">{s.noAnalysesDesc}</p>
+                <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center">
+                  <IconCamera size={24} className="text-slate-300" />
+                </div>
+                <p className="font-semibold text-slate-700">{s.noAnalyses}</p>
+                <p className="text-sm text-slate-400">{s.noAnalysesDesc}</p>
               </div>
             ) : history.map((scan) => {
               const condPrices = scan.platforms?.[scan.best_platform]?.[scan.condition]
               const mid = condPrices ? Math.round((condPrices.min + condPrices.max) / 2) : null
               const platform = platforms.find(p => p.id === scan.best_platform)
               return (
-                <div key={scan.id} className="bg-white rounded-2xl border border-brand-border p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-bold text-white"
-                    style={{ backgroundColor: platform?.color || '#64748B' }}>
+                <div key={scan.id} className="bg-white rounded-2xl border border-slate-100 p-4 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-bold text-white" style={{ backgroundColor: platform?.color || '#64748B' }}>
                     {platform?.abbr || '??'}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-brand-fg truncate">{scan.item_name}</p>
-                    <p className="text-xs text-brand-subtle">{scan.category} · {conditions.find(c => c.id === scan.condition)?.label ?? scan.condition}</p>
+                    <p className="font-semibold text-sm text-slate-900 truncate">{scan.item_name}</p>
+                    <p className="text-xs text-slate-400">{scan.category} · {conditions.find(c => c.id === scan.condition)?.label ?? scan.condition}</p>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    {mid ? <p className="font-bold text-sm text-brand-fg">~{curr}{mid}</p> : null}
-                    <p className="text-[10px] text-brand-subtle">{new Date(scan.created_at).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'short' })}</p>
+                    {mid ? <p className="font-bold text-sm text-slate-900">~{curr}{mid}</p> : null}
+                    <p className="text-[10px] text-slate-400">{new Date(scan.created_at).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'short' })}</p>
                   </div>
                 </div>
               )
@@ -775,85 +691,90 @@ export default function Home() {
             STAGE 1 — CAPTURE
         ════════════════════════════════════════════════════════════ */}
         {stage === 'capture' && (
-          <div className="flex-1 flex flex-col px-5 pt-8 pb-10 gap-8 overflow-y-auto">
+          <div className="flex-1 flex flex-col overflow-y-auto">
 
-            {/* Hero */}
-            <div className="text-center space-y-3 animate-fade-up">
-              <div className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 rounded-full px-3 py-1 mb-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-xs font-semibold text-blue-700">{s.realtimeAI}</span>
-              </div>
-              <h1 className="text-[28px] font-extrabold text-brand-fg leading-tight tracking-tight">
+            {/* ── Hero ────────────────────────────────────────────────── */}
+            <div className="px-5 pt-8 pb-2">
+              <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-400 mb-4">{s.heroLabel}</p>
+              <h1 className="text-[42px] font-black tracking-tighter leading-[1.0] text-slate-900 mb-3">
                 {s.heroLine1}<br />
-                <span className="gradient-text">{s.heroLine2}</span>
+                <span className="text-blue-600">{s.heroLine2}</span>
               </h1>
-              <p className="text-brand-subtle text-sm leading-relaxed max-w-xs mx-auto">
-                {s.heroDesc}
-              </p>
+              <p className="text-[14px] text-slate-400 leading-relaxed max-w-[30ch]">{s.heroDesc}</p>
             </div>
 
-            {/* Camera button */}
-            <div className="flex flex-col items-center gap-4">
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="relative w-40 h-40 rounded-full flex flex-col items-center justify-center gap-3 active:scale-95 transition-all duration-150 cursor-pointer"
-                style={{ background: '#0F172A' }}
-                aria-label={s.photograph}
-              >
-                <span className="btn-camera-ring" />
-                <span className="btn-camera-ring-2" />
-                <CameraIcon size={44} />
-                <span className="text-sm font-bold tracking-wide text-white">{s.photograph}</span>
-              </button>
-              <p className="text-xs text-brand-subtle">{s.tapGallery}</p>
-            </div>
-
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageSelect}
-              className="sr-only"
-              aria-label={s.photograph}
-            />
-
-            {/* Platform grid */}
-            <div className="flex flex-col items-center gap-3">
-              <p className="text-[11px] text-brand-subtle font-semibold uppercase tracking-widest">{s.pricesOn6}</p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {platforms.map((p) => (
-                  <span
-                    key={p.id}
-                    className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white border border-brand-border text-brand-secondary shadow-sm"
-                  >
-                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: p.color }} />
-                    {p.name}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* How it works */}
-            <div className="bg-white rounded-3xl border border-brand-border p-5 space-y-4">
-              <p className="text-xs font-bold text-brand-subtle uppercase tracking-widest">{s.howItWorks}</p>
-              {s.steps.map(({ step, icon, title, desc }, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-brand-fg flex items-center justify-center flex-shrink-0 text-sm">{icon}</div>
-                  <div>
-                    <p className="text-sm font-semibold text-brand-fg">{title}</p>
-                    <p className="text-xs text-brand-subtle leading-snug mt-0.5">{desc}</p>
-                  </div>
+            {/* ── Platform strip ──────────────────────────────────────── */}
+            <div className="flex gap-2 px-5 py-4 overflow-x-auto scrollbar-none">
+              {platforms.map((p) => (
+                <div key={p.id} className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-100 shadow-sm">
+                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: p.color }} />
+                  <span className="text-xs font-medium text-slate-600">{p.name}</span>
                 </div>
               ))}
             </div>
 
-            {/* Free uses badge */}
-            <p className="text-center text-xs text-brand-subtle">
-              {isPro
-                ? <span className="font-semibold text-brand-accent">{s.proBadge}</span>
-                : <><span className="font-semibold text-brand-fg">{s.freeAnalyses}</span> {s.freePerPeriod}</>
-              }
-            </p>
+            {/* ── Upload zone ─────────────────────────────────────────── */}
+            <div className="px-5 pb-4">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full rounded-3xl border-2 border-dashed border-slate-200 bg-white flex flex-col items-center justify-center gap-3 py-12 active:scale-[0.98] transition-all duration-200 cursor-pointer hover:border-blue-200 hover:bg-blue-50/30 group"
+                aria-label={s.uploadTitle}
+              >
+                <div className="w-14 h-14 rounded-2xl bg-slate-900 flex items-center justify-center group-hover:bg-blue-600 transition-colors duration-200">
+                  <IconCamera size={26} className="text-white" />
+                </div>
+                <div className="text-center">
+                  <p className="font-semibold text-slate-800 text-[15px]">{s.uploadTitle}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{s.uploadDesc}</p>
+                </div>
+              </button>
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageSelect} className="sr-only" />
+            </div>
+
+            {/* ── Stats bar ───────────────────────────────────────────── */}
+            <div className="mx-5 mb-6 rounded-2xl bg-slate-900 px-5 py-4 grid grid-cols-3 divide-x divide-white/8">
+              <div className="flex flex-col items-center gap-0.5 pr-4">
+                <span className="text-2xl font-black text-white tracking-tighter">6</span>
+                <span className="text-[10px] text-slate-400 uppercase tracking-wide">{s.statPlatforms}</span>
+              </div>
+              <div className="flex flex-col items-center gap-0.5 px-4">
+                <span className="text-2xl font-black text-white tracking-tighter">IA</span>
+                <span className="text-[10px] text-slate-400 uppercase tracking-wide">{s.statAnalysis}</span>
+              </div>
+              <div className="flex flex-col items-center gap-0.5 pl-4">
+                <span className="text-2xl font-black text-white tracking-tighter">{s.statFree}</span>
+                <span className="text-[10px] text-slate-400 uppercase tracking-wide">{s.statFreeSub}</span>
+              </div>
+            </div>
+
+            {/* ── How it works ────────────────────────────────────────── */}
+            <div className="px-5 pb-10">
+              <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-400 mb-4">{s.howItWorks}</p>
+              <div className="space-y-px">
+                {s.steps.map(({ title, desc }, i) => {
+                  const icons = [<IconPhoto size={18} />, <IconSpark size={18} />, <IconTag size={18} />]
+                  return (
+                    <div key={i} className="flex items-start gap-4 bg-white px-4 py-4 first:rounded-t-2xl last:rounded-b-2xl border-x border-t last:border-b border-slate-100">
+                      <div className="w-8 h-8 rounded-xl bg-slate-900 flex items-center justify-center flex-shrink-0 text-white mt-0.5">
+                        {icons[i]}
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-semibold text-slate-900">{title}</p>
+                        <p className="text-xs text-slate-400 leading-snug mt-0.5">{desc}</p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+
+              {/* Free badge */}
+              <p className="text-center text-xs text-slate-400 mt-6">
+                {isPro
+                  ? <span className="font-semibold text-blue-600">{s.proBadge}</span>
+                  : <><span className="font-semibold text-slate-700">{s.freeAnalyses}</span> {s.freePerPeriod}</>
+                }
+              </p>
+            </div>
           </div>
         )}
 
@@ -862,55 +783,34 @@ export default function Home() {
         ════════════════════════════════════════════════════════════ */}
         {stage === 'preview' && imagePreview && (
           <div className="flex-1 flex flex-col">
-            <div className="relative bg-black">
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="w-full aspect-square object-cover opacity-95"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+            <div className="relative bg-slate-900">
+              <img src={imagePreview} alt="Preview" className="w-full aspect-square object-cover opacity-90" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent pointer-events-none" />
             </div>
-
-            <div className="flex-1 p-4 flex flex-col gap-5 overflow-y-auto">
+            <div className="flex-1 p-5 flex flex-col gap-5 overflow-y-auto">
               {error && (
-                <div role="alert" className="bg-red-50 border border-red-200 rounded-2xl p-3.5 text-sm text-red-700 font-medium">
-                  {error}
-                </div>
+                <div role="alert" className="bg-red-50 border border-red-100 rounded-2xl p-4 text-sm text-red-600 font-medium">{error}</div>
               )}
-
               <div>
-                <p className="text-xs font-semibold text-brand-subtle uppercase tracking-wider mb-3">
-                  {s.conditionLabel}
-                </p>
+                <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-400 mb-3">{s.conditionLabel}</p>
                 <div className="grid grid-cols-2 gap-2">
                   {conditions.map((c) => (
-                    <button
-                      key={c.id}
-                      onClick={() => setCondition(c.id)}
-                      className={`p-3.5 rounded-2xl text-left transition-all duration-150 cursor-pointer ${
-                        condition === c.id
-                          ? 'bg-brand-primary text-white shadow-md shadow-slate-900/20'
-                          : 'bg-white border border-brand-border text-brand-fg hover:border-brand-secondary'
-                      }`}
-                    >
-                      <div className="font-semibold text-sm">{c.label}</div>
-                      <div className={`text-xs mt-0.5 leading-tight ${condition === c.id ? 'text-slate-300' : 'text-brand-subtle'}`}>
-                        {c.desc}
-                      </div>
+                    <button key={c.id} onClick={() => setCondition(c.id)}
+                      className={`p-4 rounded-2xl text-left transition-all duration-200 cursor-pointer active:scale-[0.98] ${
+                        condition === c.id ? 'bg-slate-900 text-white' : 'bg-white border border-slate-100 text-slate-700 hover:border-slate-300'
+                      }`}>
+                      <div className="font-semibold text-[13px]">{c.label}</div>
+                      <div className={`text-xs mt-0.5 leading-tight ${condition === c.id ? 'text-slate-400' : 'text-slate-400'}`}>{c.desc}</div>
                     </button>
                   ))}
                 </div>
               </div>
-
-              <button
-                onClick={handleAnalyze}
-                className="w-full py-4 bg-brand-accent text-white rounded-2xl font-semibold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-md shadow-blue-600/25 cursor-pointer"
-              >
+              <button onClick={handleAnalyze}
+                className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-bold text-[15px] flex items-center justify-center gap-2.5 active:scale-[0.98] transition-all cursor-pointer">
                 <span>{s.analyzeBtn}</span>
-                <ArrowIcon />
+                <IconArrow size={18} />
               </button>
-
-              <p className="text-center text-[11px] text-brand-subtle leading-relaxed">
+              <p className="text-center text-[11px] text-slate-400">
                 {getRemainingUses()} {s.remainingPre} {MONTHLY_LIMIT} {s.remainingPost}
               </p>
             </div>
@@ -922,34 +822,29 @@ export default function Home() {
         ════════════════════════════════════════════════════════════ */}
         {stage === 'analyzing' && imagePreview && (
           <div className="flex-1 flex flex-col">
-            <div className="relative scan-container bg-black">
-              <img
-                src={imagePreview}
-                alt="Analyzing"
-                className="w-full aspect-square object-cover opacity-40"
-              />
+            <div className="relative scan-container bg-slate-900">
+              <img src={imagePreview} alt="Analyzing" className="w-full aspect-square object-cover opacity-30" />
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <div className="relative w-48 h-48">
-                  <span className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-blue-400 rounded-tl-sm" />
-                  <span className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-blue-400 rounded-tr-sm" />
-                  <span className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-blue-400 rounded-bl-sm" />
-                  <span className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-blue-400 rounded-br-sm" />
+                <div className="relative w-44 h-44">
+                  <span className="absolute top-0 left-0 w-7 h-7 border-t-2 border-l-2 border-blue-400 rounded-tl" />
+                  <span className="absolute top-0 right-0 w-7 h-7 border-t-2 border-r-2 border-blue-400 rounded-tr" />
+                  <span className="absolute bottom-0 left-0 w-7 h-7 border-b-2 border-l-2 border-blue-400 rounded-bl" />
+                  <span className="absolute bottom-0 right-0 w-7 h-7 border-b-2 border-r-2 border-blue-400 rounded-br" />
                   <div className="scan-line" />
                 </div>
                 <div className="mt-8 text-center">
-                  <p className="text-white font-semibold text-lg">{s.identifying}</p>
-                  <p className="text-white/60 text-sm mt-1">{s.checkingPrices}</p>
+                  <p className="text-white font-bold text-lg tracking-tight">{s.identifying}</p>
+                  <p className="text-white/40 text-sm mt-1">{s.checkingPrices}</p>
                 </div>
               </div>
             </div>
-
-            <div className="p-4 space-y-3">
+            <div className="p-4 space-y-2">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-white rounded-2xl p-4 border border-brand-border flex items-center gap-3">
+                <div key={i} className="bg-white rounded-2xl p-4 border border-slate-100 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl shimmer flex-shrink-0" />
                   <div className="flex-1 space-y-2">
-                    <div className="h-3 w-24 rounded shimmer" />
-                    <div className="h-4 w-32 rounded shimmer" />
+                    <div className="h-3 w-20 rounded-lg shimmer" />
+                    <div className="h-4 w-28 rounded-lg shimmer" />
                     <div className="h-1.5 w-full rounded-full shimmer" />
                   </div>
                 </div>
@@ -971,41 +866,32 @@ export default function Home() {
           return (
             <div className="flex-1 flex flex-col pb-8">
               {/* Item hero */}
-              <div className="relative bg-black">
-                <img src={imagePreview} alt={results.item_name} className="w-full aspect-video object-cover opacity-80" />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-fg via-brand-fg/30 to-transparent pointer-events-none" />
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <p className="text-white/60 text-xs font-semibold uppercase tracking-widest mb-1">
-                    {results.category || 'Item'}
-                  </p>
-                  <h2 className="text-white font-bold text-xl leading-snug">
-                    {results.item_name}
-                  </h2>
+              <div className="relative bg-slate-900">
+                <img src={imagePreview} alt={results.item_name} className="w-full aspect-video object-cover opacity-70" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent pointer-events-none" />
+                <div className="absolute bottom-0 left-0 right-0 p-5">
+                  <p className="text-white/40 text-[10px] font-semibold uppercase tracking-widest mb-1">{results.category || 'Item'}</p>
+                  <h2 className="text-white font-black text-xl tracking-tight leading-snug">{results.item_name}</h2>
                   {results.confidence === 'high' && (
-                    <div className="flex items-center gap-1 mt-1.5">
-                      <StarIcon />
-                      <span className="text-yellow-300 text-xs font-medium">{s.highConfidence}</span>
+                    <div className="flex items-center gap-1 mt-2">
+                      <IconStar size={10} />
+                      <span className="text-yellow-400 text-xs font-semibold">{s.highConfidence}</span>
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="p-4 flex flex-col gap-5">
+              <div className="p-5 flex flex-col gap-6">
 
                 {/* ── Condition selector ─────────────────────────────────── */}
                 <div>
-                  <p className="text-xs font-semibold text-brand-subtle uppercase tracking-wider mb-2">{s.conditionLabelResults}</p>
-                  <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
+                  <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-400 mb-2">{s.conditionLabelResults}</p>
+                  <div className="flex gap-2 overflow-x-auto pb-1 -mx-5 px-5 scrollbar-none">
                     {conditions.map((c) => (
-                      <button
-                        key={c.id}
-                        onClick={() => setCondition(c.id)}
-                        className={`flex-shrink-0 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer ${
-                          condition === c.id
-                            ? 'bg-brand-primary text-white shadow-sm'
-                            : 'bg-white border border-brand-border text-brand-secondary hover:border-slate-400'
-                        }`}
-                      >
+                      <button key={c.id} onClick={() => setCondition(c.id)}
+                        className={`flex-shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
+                          condition === c.id ? 'bg-slate-900 text-white' : 'bg-white border border-slate-100 text-slate-500 hover:border-slate-300'
+                        }`}>
                         {c.label}
                       </button>
                     ))}
@@ -1014,103 +900,56 @@ export default function Home() {
 
                 {/* ── Platform price cards ───────────────────────────────── */}
                 <div>
-                  <p className="text-xs font-semibold text-brand-subtle uppercase tracking-wider mb-2">{s.resalePrices}</p>
-                  <div className="flex flex-col gap-2">
+                  <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-400 mb-3">{s.resalePrices}</p>
+                  <div className="space-y-2">
                     {prices.length === 0 ? (
-                      <p className="text-sm text-brand-subtle text-center py-4">{s.noData}</p>
+                      <p className="text-sm text-slate-400 text-center py-4">{s.noData}</p>
                     ) : prices.map((p, i) => (
-                      <div
-                        key={p.id}
-                        className={`bg-white rounded-2xl p-4 flex items-center gap-3 animate-fade-up ${
-                          i === 0 ? 'ring-2 ring-brand-accent' : 'border border-brand-border'
-                        }`}
-                        style={{ animationDelay: `${i * 60}ms` }}
-                      >
-                        <div
-                          className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-bold text-white shadow-sm"
-                          style={{ backgroundColor: p.color }}
-                          aria-label={p.name}
-                        >
+                      <div key={p.id}
+                        className={`bg-white rounded-2xl p-4 flex items-center gap-3 animate-fade-up transition-all ${i === 0 ? 'ring-2 ring-blue-500' : 'border border-slate-100'}`}
+                        style={{ animationDelay: `${i * 50}ms` }}>
+                        <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-bold text-white" style={{ backgroundColor: p.color }}>
                           {p.abbr}
                         </div>
-
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2 mb-1">
-                            <span className="font-semibold text-sm text-brand-fg truncate">{p.name}</span>
+                          <div className="flex items-center justify-between gap-2 mb-0.5">
+                            <span className="font-semibold text-[13px] text-slate-900 truncate">{p.name}</span>
                             <div className="flex items-center gap-1 flex-shrink-0">
                               {p.badge && (
-                                <span
-                                  className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md"
-                                  style={{ backgroundColor: p.bg, color: p.color }}
-                                >
-                                  {p.badge}
-                                </span>
+                                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded" style={{ backgroundColor: p.bg, color: p.color }}>{p.badge}</span>
                               )}
-                              {i === 0 && (
-                                <span className="text-[10px] bg-blue-50 text-brand-accent font-semibold px-1.5 py-0.5 rounded-md">
-                                  {s.topPrice}
-                                </span>
-                              )}
+                              {i === 0 && <span className="text-[10px] bg-blue-50 text-blue-600 font-semibold px-1.5 py-0.5 rounded">{s.topPrice}</span>}
                             </div>
                           </div>
-
-                          <div className="flex items-center justify-between">
-                            <span className="text-brand-fg font-bold text-base">
-                              {curr}{p.min} – {curr}{p.max}
-                            </span>
-                            <span className="text-brand-subtle text-xs">
-                              ~{curr}{p.mid}
-                            </span>
+                          <div className="flex items-baseline justify-between">
+                            <span className="text-slate-900 font-black text-lg tracking-tight">{curr}{p.min}–{curr}{p.max}</span>
+                            <span className="text-slate-400 text-xs">~{curr}{p.mid}</span>
                           </div>
-
-                          <div className="mt-2 h-1.5 bg-brand-muted rounded-full overflow-hidden">
-                            <div
-                              className="h-full rounded-full transition-all duration-700 ease-out"
-                              style={{
-                                width: `${Math.max(10, (p.max / maxMax) * 100)}%`,
-                                backgroundColor: p.color,
-                              }}
-                            />
+                          <div className="mt-2 h-1 bg-slate-100 rounded-full overflow-hidden">
+                            <div className="h-full rounded-full transition-all duration-700 ease-out" style={{ width: `${Math.max(8, (p.max / maxMax) * 100)}%`, backgroundColor: p.color }} />
                           </div>
                         </div>
-
-                        <ChevronIcon />
+                        <IconChevron size={14} />
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* ── Pricing scale ──────────────────────────────────────── */}
+                {/* ── Price scale ─────────────────────────────────────────── */}
                 {scaleData.length > 1 && (() => {
                   const bestP = platforms.find((p) => p.id === bestPlatform)
                   return (
-                    <div className="bg-white rounded-2xl p-4 border border-brand-border">
-                      <p className="text-xs font-semibold text-brand-subtle uppercase tracking-wider mb-1">
-                        {s.priceScaleLabel} — {bestP?.name || bestPlatform}
-                      </p>
-                      <p className="text-xs text-brand-subtle mb-3">{s.conditionImpact}</p>
-                      <div className="space-y-2.5">
+                    <div className="bg-white rounded-2xl p-4 border border-slate-100">
+                      <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-400 mb-0.5">{s.priceScaleLabel} — {bestP?.name || bestPlatform}</p>
+                      <p className="text-xs text-slate-400 mb-4">{s.conditionImpact}</p>
+                      <div className="space-y-3">
                         {scaleData.map((sc) => (
                           <div key={sc.id} className="flex items-center gap-3">
-                            <span className={`text-xs font-medium w-24 flex-shrink-0 ${
-                              sc.id === condition ? 'text-brand-accent font-semibold' : 'text-brand-secondary'
-                            }`}>
-                              {sc.label}
-                            </span>
-                            <div className="flex-1 h-2 bg-brand-muted rounded-full overflow-hidden">
-                              <div
-                                className="h-full rounded-full transition-all duration-700"
-                                style={{
-                                  width: `${Math.max(5, (sc.mid / maxMid) * 100)}%`,
-                                  backgroundColor: sc.id === condition ? '#2563EB' : '#CBD5E1',
-                                }}
-                              />
+                            <span className={`text-xs font-medium w-20 flex-shrink-0 ${sc.id === condition ? 'text-blue-600 font-semibold' : 'text-slate-400'}`}>{sc.label}</span>
+                            <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                              <div className="h-full rounded-full transition-all duration-700" style={{ width: `${Math.max(5, (sc.mid / maxMid) * 100)}%`, backgroundColor: sc.id === condition ? '#2563EB' : '#CBD5E1' }} />
                             </div>
-                            <span className={`text-sm font-bold w-14 text-right flex-shrink-0 ${
-                              sc.id === condition ? 'text-brand-accent' : 'text-brand-secondary'
-                            }`}>
-                              ~{curr}{sc.mid}
-                            </span>
+                            <span className={`text-sm font-bold w-14 text-right flex-shrink-0 ${sc.id === condition ? 'text-blue-600' : 'text-slate-400'}`}>~{curr}{sc.mid}</span>
                           </div>
                         ))}
                       </div>
@@ -1118,28 +957,22 @@ export default function Home() {
                   )
                 })()}
 
-                {/* ── AI Tip ────────────────────────────────────────────── */}
+                {/* ── AI Tip ──────────────────────────────────────────────── */}
                 {results.tip && (
-                  <div className="bg-brand-fg rounded-2xl p-4">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
-                      {s.aiTip}
-                    </p>
+                  <div className="bg-slate-900 rounded-2xl p-4">
+                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-2">{s.aiTip}</p>
                     <p className="text-sm text-slate-200 leading-relaxed">{results.tip}</p>
                   </div>
                 )}
 
-                {/* ── Reset CTA ─────────────────────────────────────────── */}
-                <button
-                  onClick={handleReset}
-                  className="w-full py-4 bg-brand-primary text-white rounded-2xl font-semibold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform cursor-pointer"
-                >
-                  <RefreshIcon />
+                {/* ── Reset CTA ───────────────────────────────────────────── */}
+                <button onClick={handleReset}
+                  className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-bold text-[15px] flex items-center justify-center gap-2.5 active:scale-[0.98] transition-all cursor-pointer">
+                  <IconRefresh size={16} />
                   <span>{s.analyzeAnother}</span>
                 </button>
 
-                <p className="text-center text-[11px] text-brand-subtle leading-relaxed">
-                  {s.disclaimer}
-                </p>
+                <p className="text-center text-[11px] text-slate-400 leading-relaxed">{s.disclaimer}</p>
               </div>
             </div>
           )
@@ -1148,10 +981,10 @@ export default function Home() {
       </main>
 
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
-      <footer className="flex-shrink-0 py-4 px-5 flex justify-center gap-5 border-t border-brand-border">
-        <a href="/privacidad" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">{s.privacy}</a>
-        <a href="/terminos" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">{s.terms}</a>
-        <a href="mailto:soporte@resellsnap.es" className="text-xs text-brand-subtle hover:text-brand-fg transition-colors">{s.contact}</a>
+      <footer className="flex-shrink-0 py-4 px-5 flex justify-center gap-6 border-t border-slate-100">
+        <a href="/privacidad" className="text-xs text-slate-400 hover:text-slate-700 transition-colors">{s.privacy}</a>
+        <a href="/terminos" className="text-xs text-slate-400 hover:text-slate-700 transition-colors">{s.terms}</a>
+        <a href="mailto:soporte@resellsnap.es" className="text-xs text-slate-400 hover:text-slate-700 transition-colors">{s.contact}</a>
       </footer>
 
     </div>
