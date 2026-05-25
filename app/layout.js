@@ -1,5 +1,6 @@
 import { ClerkProvider } from '@clerk/nextjs'
 import { Inter } from 'next/font/google'
+import InstallBanner from './components/InstallBanner'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
@@ -36,6 +37,11 @@ export const metadata = {
     index: true,
     follow: true,
     googleBot: { index: true, follow: true },
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'ResellSnap',
+    statusBarStyle: 'black-translucent',
   },
 }
 
@@ -139,6 +145,7 @@ export default function RootLayout({ children }) {
       <html lang="es">
         <body className={inter.className}>
           {children}
+          <InstallBanner />
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
