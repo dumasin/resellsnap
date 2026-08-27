@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useUser, SignInButton, UserButton } from '@clerk/nextjs'
-import { supabase } from '../lib/supabase'
+import { useSupabase } from '../lib/supabase'
 import Onboarding from './components/Onboarding'
 
 // ─── Usage limit ──────────────────────────────────────────────────────────────
@@ -316,6 +316,7 @@ export default function Home() {
   const [checkoutError, setCheckoutError] = useState(null)
   const fileInputRef = useRef(null)
   const { isSignedIn, user } = useUser()
+  const supabase = useSupabase()
 
   // ── Language detection ──────────────────────────────────────────────────────
   useEffect(() => {
@@ -433,18 +434,20 @@ export default function Home() {
   // ── Supabase ─────────────────────────────────────────────────────────────────
   const saveScan = useCallback(async (data, cond) => {
     if (!user?.id) return
-    await supabase.from('scans').insert({
+    const { error } = await supabase.from('scans').insert({
       user_id: user.id, item_name: data.item_name, brand: data.brand,
       category: data.category, confidence: data.confidence, condition: cond,
       platforms: data.platforms, best_platform: data.best_platform, tip: data.tip,
     })
-  }, [user])
+    if (error) console.error('[saveScan] insert failed:', error)
+  }, [user, supabase])
 
   const loadHistory = useCallback(async () => {
     if (!user?.id) return
-    const { data } = await supabase.from('scans').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(30)
+    const { data, error } = await supabase.from('scans').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(30)
+    if (error) console.error('[loadHistory] select failed:', error)
     if (data) setHistory(data)
-  }, [user])
+  }, [user, supabase])
 
   // ── Waitlist ────────────────────────────────────────────────────────────────
   const handleWaitlist = useCallback(async (e) => {
